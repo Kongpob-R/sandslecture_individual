@@ -12,19 +12,19 @@
         
         <form class=rightside >
             <input type="text" placeholder="Search.." name="search">
-            <button type="submit">Search</button>
+            <button id='button_Search' type="submit">Search</button>
             
         </form>
         <body>
-            <button class=rightside type="button" onclick="window.location.href = '{% url 'login' %}';">Login</button>
+            <button id='button_Login' class=rightside type="button" onclick="window.location.href = '{% url 'login' %}';">Login</button>
         </body>
         
     </div>
-    <h1>Popular</h1>
+    <h1 id='Popular'>Popular</h1>
     <div>
 
     </div>
-    <h1>Lastest</h1>
+    <h1 id='Lastest'>Lastest</h1>
     <div>
         
     </div>
