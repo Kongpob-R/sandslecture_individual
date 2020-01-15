@@ -18,4 +18,5 @@ from Homepage import views
 
 urlpatterns = [
     url(r'^$', views.home_page, name='home'),
+    url(r'^login', views.login, name='login'),
 ]
