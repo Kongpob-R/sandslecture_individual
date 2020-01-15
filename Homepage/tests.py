@@ -19,7 +19,21 @@ class HomePageTest(TestCase):
         html = response.content.decode('utf8')
         self.assertTrue(html.startswith('<html>'))
         self.assertIn('<style>', html)
-        self.assertIn('div{width: 300px;  padding: 50px;  margin: 20px;}', html)
+        self.assertIn('div{background-color: lightgrey; width: 300px;  padding: 50px;  margin: 20px;}', html)
+
+        self.assertIn('</style>', html)
+        self.assertTrue(html.strip().endswith('</html>'))
+        
+    def test_home_page_returns_correct_divBox(self):
+        response=self.client.get('/')
+        html = response.content.decode('utf8')
+        self.assertTrue(html.startswith('<html>'))
+        self.assertIn('<style>', html)
+        self.assertIn('.rightside{float: right;}', html)
+        self.assertIn('</style>', html)
+        self.assertTrue(html.strip().endswith('</html>'))
+
+        
 
         self.assertIn('</style>', html)
         self.assertTrue(html.strip().endswith('</html>'))
@@ -39,7 +53,7 @@ class HomePageTest(TestCase):
         html = response.content.decode('utf8')
         self.assertTrue(html.startswith('<html>'))
         self.assertIn('<div>', html)
-        self.assertIn('<button type="button">Login</button>', html)
+        self.assertIn('<button class=rightside type="button">Login</button>', html)
         self.assertIn('</div>', html)
         self.assertTrue(html.strip().endswith('</html>'))
 
@@ -48,9 +62,9 @@ class HomePageTest(TestCase):
         html = response.content.decode('utf8')
         self.assertTrue(html.startswith('<html>'))
         self.assertIn('<div>', html)
-        self.assertIn('<form>', html)
+        self.assertIn('<form class=rightside >', html)
+        self.assertIn('<button type="submit">Search</button>', html)
         self.assertIn('<input type="text" placeholder="Search.." name="search">', html)
-        self.assertIn('<<button type="submit"><i class="fa fa-search"></i></button>>', html)
         self.assertIn('</form>', html)
         self.assertIn('</div>', html)
         self.assertTrue(html.strip().endswith('</html>'))
