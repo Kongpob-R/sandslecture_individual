@@ -1,0 +1,32 @@
+<body>
+<html>
+    <style>
+        div{background-color: lightgrey; width: 350px;  padding: 50px;  margin: 20px;}
+        .rightside{float: right;}
+
+        
+
+    </style>
+    <title>S&SLecture</title>
+     
+    
+    <div>
+        {% extends 'base.html' %}
+
+        {% block title %}Login{% endblock %}
+
+        {% block content %}
+        <h2>Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button id="logins" type="submit">Login</button>
+            <a href="{% url 'signup' %}">Create a new accounts</a>
+        </form>
+        {% endblock %}
+    </div>
+
+    
+    
+</html>
+</body>

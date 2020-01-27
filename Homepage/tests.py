@@ -48,14 +48,7 @@ class HomePageTest(TestCase):
         self.assertIn('</div>', html)
         self.assertTrue(html.strip().endswith('</html>'))
 
-    def test_home_page_returns_correct_login_inBox(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<div>', html)
-        self.assertIn('<button class=rightside type="button" onclick="window.location.href = '{% url 'login' %}';">Login</button>', html)
-        self.assertIn('</div>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
+    
 
     def test_home_page_returns_correct_search_inBox(self):
         response=self.client.get('/')
