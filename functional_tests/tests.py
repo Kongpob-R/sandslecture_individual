@@ -10,7 +10,7 @@ class NewVisitorTest(LiveServerTestCase):
     def tearDown(self):  
         self.browser.quit()
 
-    def test_can_start_a_list_and_retrieve_it_later(self):  
+    def test_home(self):  
          
         # He goes to check out its homepage
         self.browser.get(self.live_server_url)
@@ -28,8 +28,6 @@ class NewVisitorTest(LiveServerTestCase):
         password = self.browser.find_element_by_id('password')  
         password.send_keys('123456')     
 
-        logins_button=self.browser.find_element_by_id('logins')
-        login_button.send_keys(Keys.ENTER) 
 
         # เขาพิมชื่อวิชา "Ubiquitous Computing" ลงไปในกล่องข้อความ
         # เมื่อเขาทำการ enter 
@@ -44,7 +42,29 @@ class NewVisitorTest(LiveServerTestCase):
         self.fail('Finish the test!')  
 
         # She is invited to enter a to-do item straight away
+
+    def test_login(self):  
+         
+        self.browser.get('http://localhost:8000'+'/accounts/login/')
+        # เขาลงชื่อเข้าใช้งานบัญชี โดยการกรอก username กับ password
+
+
+        username = self.browser.find_element_by_id('id_username')  
+        username.send_keys('Andrew')
+
+        password = self.browser.find_element_by_id('id_password')  
+        password.send_keys('123456')  
         
+        login = self.browser.find_element_by_id('logins')   
+
+        login.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+
+        self.fail('Finish the test!')  
+    def upload(self):  
+        self.browser.get(self.test_home+'/upload/')
+        self.fail('Finish the test!')  
 
 if __name__ == '__main__':  
     unittest.main(warnings='ignore')  
