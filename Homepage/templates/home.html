@@ -1,0 +1,144 @@
+{% load static %}
+<html>
+
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>S&SLecture</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-light fixed-top bg-pink">
+        <a class="navbar-brand" href="#">
+            <img src='{% static "/Homepage/logo.png" %}' width="45" height="45" alt="">
+        </a>
+
+        <ul class="nav navbar-nav navbar-right">
+            <form class="form-inline">
+                <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>Log in</a></li>
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </ul>
+    </nav>
+
+
+    <br><br><br>
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            <div class="main">
+                <i class="fa fa-trophy"></i>
+                <h1>Popular</h1>
+                <hr>
+                <br>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card mb-4 box-shadow">
+
+                        <!-- Card image -->
+                        <div class="view overlay">
+                            <img class="card-img-top"
+                                src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg"
+                                alt="Card image cap">
+                            <a href="#!">
+                                <div class="mask rgba-white-slight"></div>
+                            </a>
+                        </div>
+
+                        <!-- Card content -->
+                        <div class="card-body">
+
+                            <!-- Title -->
+                            <h4 class="card-title">Card title</h4>
+
+                            <!-- Username -->
+                            <a class="subinfo__author" href="#">
+                                <img class="subinfo__author__img" alt="ผู้เยี่ยมชม"
+                                    src="https://s3-ap-northeast-1.amazonaws.com/image.speedy-edu.com/uploads/user/avatar/1191784/thumb_m_3e1ecd3a31.jpg">
+                                <span  class="subinfo__author__name">Username</span>
+                            </a>
+                            
+                            <!-- Views -->
+                            <p class="card-text">Views</p>
+
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+    
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            <div class="main">
+                <i class="fa fa-trophy"></i>
+                <h1>Lastest</h1>
+                <hr>
+                <br>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card mb-4 box-shadow">
+
+                        <!-- Card image -->
+                        <div class="view overlay">
+                            <img class="card-img-top"
+                                src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg"
+                                alt="Card image cap">
+                            <a href="#!">
+                                <div class="mask rgba-white-slight"></div>
+                            </a>
+                        </div>
+
+                        <!-- Card content -->
+                        <div class="card-body">
+
+                            <!-- Title -->
+                            <h4 class="card-title">Card title</h4>
+
+                            <!-- Username -->
+                            <a class="subinfo__author" href="#">
+                                <img class="subinfo__author__img" alt="ผู้เยี่ยมชม"
+                                    src="https://s3-ap-northeast-1.amazonaws.com/image.speedy-edu.com/uploads/user/avatar/1191784/thumb_m_3e1ecd3a31.jpg">
+                                <span  class="subinfo__author__name">Username</span>
+                            </a>
+                            
+                            <!-- Views -->
+                            <p class="card-text">Views</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
