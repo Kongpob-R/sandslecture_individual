@@ -16,10 +16,10 @@
         {% block content %}
         {% if user.is_authenticated %}
         Hi {{ user.username }}!
-        <button id="login" onclick="window.location.href = '{% url 'logout' %}';">Logout</button>
+        <button id="logout" onclick="window.location.href = '{% url 'logout' %}';">Logout</button>
         {% else %}
         You are not logged in
-        <button id="logout" onclick="window.location.href = '{% url 'login' %}';">Login</button>
+        <button id="login" onclick="window.location.href = '{% url 'login' %}';">Login</button>
 
         {% endif %}
         
