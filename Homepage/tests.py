@@ -1,93 +1,43 @@
-
+from Homepage.models import Lecture
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.test import TestCase
 
 class HomePageTest(TestCase):
 
+    def test_saving_and_retrieving_lecture_title(self):
+        firstLecture = Lecture()
+        firstLecture.title = 'The first (ever) lecture title'
+        firstLecture.save()
 
+        secondLecture = Lecture()
+        secondLecture.title = 'lecture title the second'
+        secondLecture.save()
 
-    def test_home_page_returns_correct_title(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<title>S&SLecture</title>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
+        lectures = Lecture.objects.all()
+        self.assertEqual(lectures.count(), 2)
 
-    
-    def test_home_page_returns_correct_divBox(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<style>', html)
-        self.assertIn('div{background-color: lightgrey; width: 300px;  padding: 50px;  margin: 20px;}', html)
+        firstLecture = lectures[0]
+        secondLecture = lectures[1]
+        self.assertEqual(firstLecture.title, 'The first (ever) lecture title')
+        self.assertEqual(firstLecture.id, 1)
+        self.assertEqual(secondLecture.title, 'lecture title the second')
+        self.assertEqual(secondLecture.id, 2)
 
-        self.assertIn('</style>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
-        
-    def test_home_page_returns_correct_divBox(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<style>', html)
-        self.assertIn('.rightside{float: right;}', html)
-        self.assertIn('</style>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
+    def test_saving_lecture_id_auto_increment_start_at_1(self):
+        firstLecture = Lecture()
+        firstLecture.title = 'The first (ever) lecture title'
+        firstLecture.save()
 
-        
+        secondLecture = Lecture()
+        secondLecture.title = 'lecture title the second'
+        secondLecture.save()
 
-        self.assertIn('</style>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
+        lectures = Lecture.objects.all()
+        self.assertEqual(lectures.count(), 2)
 
-        
-    def test_home_page_returns_correct_loginbox(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<div>', html)
-        self.assertIn('<img src="">', html)
-        self.assertIn('</div>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
+        firstLecture = lectures[0]
+        secondLecture = lectures[1]
+        self.assertEqual(firstLecture.id, 1)
+        self.assertEqual(secondLecture.id, 2)
 
-    
-
-    def test_home_page_returns_correct_search_inBox(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<div>', html)
-        self.assertIn('<form class=rightside >', html)
-        self.assertIn('<button type="submit">Search</button>', html)
-        self.assertIn('<input type="text" placeholder="Search.." name="search">', html)
-        self.assertIn('</form>', html)
-        self.assertIn('</div>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
-    
-    def test_home_page_returns_correct_Popolar_head1(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<h1>Popular</h1>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
-
-    def test_home_page_returns_correct_Box_Popolar(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<div>', html)
-        self.assertIn('</div>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
-
-    def test_home_page_returns_correct_Last_head2(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<h1>Lastest</h1>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
-
-    def test_home_page_returns_correct_Box_Last(self):
-        response=self.client.get('/')
-        html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
-        self.assertIn('<div>', html)
-        self.assertIn('</div>', html)
-        self.assertTrue(html.strip().endswith('</html>'))
