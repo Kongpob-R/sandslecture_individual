@@ -1,16 +1,35 @@
 from django.shortcuts import render
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
-from django.views import generic
+from django.shortcuts import render, redirect
 
-class SignUp(generic.CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'signup.html'
-    
 # Create your views here.
-def home_page(request):
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})
+
+def login(request):
+    pass
+
+def home(request):
     return render(request, 'home.html')
+
 def upload(request):
     return render(request, 'upload.html')
+
+def lecture(request,lectue_id):
+    pass
+
+def profile(request,profile_id):
+    pass
 

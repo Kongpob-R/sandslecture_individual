@@ -1,21 +1,26 @@
 <!-- templates/base.html -->
 <!DOCTYPE html>
 <html>
- <style>
-        div{background-color: lightgrey; width: 1000px;  padding: 50px;  margin: 20px;}
-        .rightside{float: right;}
+<style>
+  div {
+    background-color: lightgrey;
+    width: 1000px;
+    padding: 50px;
+    margin: 20px;
+  }
 
-        
+  .rightside {
+    float: right;
+  }
+</style>
 
-  </style>
 <head>
-  <meta charset="utf-8">
   <title>{% block title %}S&SLecture{% endblock %}</title>
 </head>
+
 <body>
-  <main>
-    {% block content %}
-    {% endblock %}
-  </main>
+  {% block content %}
+  {% endblock %}
 </body>
+
 </html>

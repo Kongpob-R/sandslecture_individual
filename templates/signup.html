@@ -1,32 +1,10 @@
+{% extends 'base.html' %}
 
-<body>
-<html>
-    <style>
-        div{background-color: lightgrey; width: 350px;  padding: 50px;  margin: 20px;}
-        .rightside{float: right;}
-
-        
-
-    </style>
-    <title>S&SLecture</title>
-     
-    
-    <div>
-        {% extends 'base.html' %}
-
-        {% block title %}Sign Up{% endblock %}
-
-        {% block content %}
-        <h2>Sign up</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Sign up</button>
-        </form>
-        {% endblock %}
-    </div>
-
-    
-    
-</html>
-</body>
+{% block content %}
+  <h2>Sign up</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign up</button>
+  </form>
+{% endblock %}
