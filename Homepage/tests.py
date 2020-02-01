@@ -20,9 +20,7 @@ class HomePageTest(TestCase):
         firstLecture = lectures[0]
         secondLecture = lectures[1]
         self.assertEqual(firstLecture.title, 'The first (ever) lecture title')
-        self.assertEqual(firstLecture.id, 1)
         self.assertEqual(secondLecture.title, 'lecture title the second')
-        self.assertEqual(secondLecture.id, 2)
 
     def test_saving_lecture_id_auto_increment_start_at_1(self):
         firstLecture = Lecture()
