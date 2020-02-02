@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.conf.urls import url
 from Homepage import views
 from django.urls import path, include
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')), 
@@ -26,5 +27,6 @@ urlpatterns = [
     path('upload/',views.upload,name='upload'),
     path('<int:lecture_id>/', views.lecture, name='lecture'),
     path('profile/<int:profile_id>/', views.profile, name='profile'),
-]
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
