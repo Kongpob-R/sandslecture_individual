@@ -5,4 +5,4 @@ from .models import *
 class Profileform(ModelForm):
      class Meta:
         model = Profile
-        fields = ['Profile_img']
+        fields = ['profilePicture']

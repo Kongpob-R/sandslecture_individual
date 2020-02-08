@@ -35,8 +35,6 @@ def profile(request):
         if form.is_valid():
             form.save()
             
-            object_img=Profile.objects.all()
-
             
             return render(request,'test_profile.html',{'form_44':object_img})
     else:

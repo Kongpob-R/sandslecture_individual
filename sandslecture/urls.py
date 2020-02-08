@@ -27,7 +27,7 @@ urlpatterns = [
     path('upload/',views.upload,name='upload'),
     path('<int:lecture_id>/', views.lecture, name='lecture'),
     #path('profile/<int:profile_id>/', views.profile, name='profile'),
-    path("Profile/",views.profile,name='profile'),
+    #path("Profile/",views.profile,name='profile'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
