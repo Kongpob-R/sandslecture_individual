@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from .forms import *
+from .models import Lecture,Profile
 
 # Create your views here.
 def signup(request):
@@ -29,15 +31,16 @@ def upload(request):
 def lecture(request,lectue_id):
     pass
 
-def profile(request):
+def profile(request, username):
+    profileObj = Profile.objects.get(user = request.user)
     if request.method == 'POST':
         form=Profileform(request.POST , request.FILES)
         if form.is_valid():
-            form.save()
+            profileObj.profilePicture = form.cleaned_data.get('profilePicture')
+            profileObj.save()
             
-            
-            return render(request,'test_profile.html',{'form_44':object_img})
+            return HttpResponseRedirect("/profile/"+username)
     else:
         form=Profileform()
-    return render(request,'test_profile.html',{'form':form})
+    return render(request,'profile.html',{'form': form, 'profile': profileObj})
 

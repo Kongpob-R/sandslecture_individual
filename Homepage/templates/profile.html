@@ -3,4 +3,31 @@
 {% block title %}S&SLecture Profile{% endblock %}
 
 {% block content %}
+<div>
+    {% if profile.profilePicture %}
+    <img src="{{profile.profilePicture.url}}">
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{form.as_p}}
+
+        <button class="button" type="submit">Upload</button>
+        <p align="center"> {{user.username}}</p>
+        <p align="center">0 view</p>
+    </form>
+</div>
+<div>
+    <p>My Lecture</p>
+    <div class="Post">
+        <p></p>
+    </div>
+</div>
+<div>
+    <p>Fav Lecture</p>
+    <div class="Post">
+        <p></p>
+    </div>
+</div>
 {% endblock %}
