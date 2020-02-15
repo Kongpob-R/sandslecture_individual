@@ -6,3 +6,13 @@ class Profileform(ModelForm):
      class Meta:
         model = Profile
         fields = ['profilePicture']
+
+class LectureForms(ModelForm):
+   class Meta:
+      model = Lecture
+      fields = ['title','subject','description']
+
+class Lecture_imgForms(ModelForm):
+      class Meta:
+         model = Lecture_img
+         fields = ['image']

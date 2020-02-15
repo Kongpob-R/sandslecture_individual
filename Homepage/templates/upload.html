@@ -10,15 +10,25 @@
     </style>
     <title>S&SLecture</title>
      
-    
-    <div>
+    <form method="post" enctype="multipart/form-data" >
+       {% csrf_token %}
+        <div>
+            {{Lecture}}
+        {% for i in Lecture_img %}
+            
+            <img src="{{ i.image.url }}" height="100 width="100"><br>
+        {%endfor %}
+        </div>
+        <div>
 
-        <h2>Title</h2>
-        <input type="text" placeholder="Title.." id="Title">
-        <h2>Description</h2>
-        <input type="text" placeholder="Description.." id="Description">
-        
-    </div>
+            
+                {{form.as_p}}
+                
+
+
+        </div>
+            <input type="submit">
+    </form>
 
     
     
