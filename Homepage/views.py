@@ -90,7 +90,8 @@ def lecture(request,lectue_id):
     pass
 
 def profile(request, username):
-    profileObj = Profile.objects.get(user = request.user)
+    userObj = User.objects.get(username = username)
+    profileObj = Profile.objects.get(user = userObj)
     if request.method == 'POST':
         form=Profileform(request.POST , request.FILES)
         if form.is_valid():
