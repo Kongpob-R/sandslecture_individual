@@ -35,13 +35,13 @@ def upload(request):
         if LectureForms1.is_valid() and  Lecture_imgForms1.is_valid():
             Lec=LectureForms1.save(commit=False)
             #Lectitle=Lecture_imgForms1.cleaned_data.get(title)
-            title_object=Lecture.objects.filter(title=LectureForms1.cleaned_data.get('title'))
+            title_object=Lecture.objects.filter(title=LectureForms1.cleaned_data.get('title'),description=LectureForms1.cleaned_data.get('description'))
             #subject_object
-            description_object=Lecture.objects.filter(title=LectureForms1.cleaned_data.get('description'))
-            if title_object==description_object:
-                for i in title_object:
-                    L=Lecture_img.objects.filter(LectureKey=i)
-                    v+=1
+            #description_object=Lecture.objects.filter(description=LectureForms1.cleaned_data.get('description'))
+            #if title_object==description_object:
+            for i in title_object:
+                L=Lecture_img.objects.filter(LectureKey=i)
+                v+=1
 
             #me=Lecture(title=LectureForms1.cleaned_data.get('title'),subject=LectureForms1.cleaned_data.get('subject'),description=LectureForms1.cleaned_data.get('description'))
             if v>0:
@@ -64,7 +64,7 @@ def upload(request):
             
 
              
-            return render(request, 'upload.html',{'form':Lecture_imgForms1 , 'Lecture':LectureForms1 , "Lecture_img":Img_obj})
+            return render(request, 'upload.html',{'form':Lecture_imgForms1 , 'Lecture':LectureForms1 , "Lecture_img":Img_obj , "title_object":title_object})
         
 
     else:

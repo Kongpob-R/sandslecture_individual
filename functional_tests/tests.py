@@ -14,7 +14,7 @@ class NewVisitorTest(LiveServerTestCase):
     def tearDown(self):  
         self.browser.quit()
 
-    '''def wait_for_page_to_render_text_in_id(self, text, targetID):
+    def wait_for_page_to_render_text_in_id(self, text, targetID):
         start_time = time.time()
         while True:  
             try:
@@ -81,4 +81,4 @@ class NewVisitorTest(LiveServerTestCase):
         # He found his lecture showing up
         # He click logout
 
-        self.fail('Finish the test!')  '''
+        self.fail('Finish the test!')  

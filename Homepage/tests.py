@@ -10,7 +10,7 @@ from sandslecture.settings import BASE_DIR
 
 class HomePageTest(TestCase):
 
-    '''def test_saving_and_retrieving_lecture_title(self):
+    def test_saving_and_retrieving_lecture_title(self):
         firstLecture = Lecture()
         firstLecture.title = 'The first (ever) lecture title'
         firstLecture.save()
@@ -75,13 +75,13 @@ class HomePageTest(TestCase):
         obj = Lecture.objects.all().last()
         field_object = Lecture._meta.get_field('image')
         field_value = field_object.value_from_object(obj)
-        self.assertEqual(field_value,1)'''
+        self.assertEqual(field_value,1)
 
-    def test_upload_forms_Profile(self):
+    def test_upload_forms_Lecture(self):
         c = Client()
         
         localtion=BASE_DIR
-        response = c.post('/upload/', {'title':'tim','subject':'666','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
+        response = c.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
         CountLec=Lecture.objects.count()
         Count_object=Lecture_img.objects.count()
         #obj = Profile.objects.all().last()
@@ -90,5 +90,16 @@ class HomePageTest(TestCase):
        # self.assertTrue(Count_object.is_valid())
         self.assertEqual(CountLec,1)
         self.assertEqual(Count_object,1)
-        self.assertEqual(response.status_code,'<ImageFieldFile: lecture_image/test_image_lec_SJw9IrQ.png>')
+        self.assertEqual(response.status_code,200)
         #self.assertEqual(field_value, 1)
+
+    def test_upload_Lecture_many_to_one(self):
+        c=Client()
+        localtion=BASE_DIR
+        response = c.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} )
+        response2 = c.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666888.png', content=open(localtion+'/red.png', 'rb').read())} )
+        CountLec=Lecture.objects.count()
+        Count_object_img=Lecture_img.objects.count()
+        self.assertEqual(CountLec,1)
+        self.assertEqual(Count_object_img,2)
+        self.assertEqual(response2.status_code,200)
