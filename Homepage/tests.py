@@ -10,6 +10,14 @@ from sandslecture.settings import BASE_DIR
 
 class HomePageTest(TestCase):
 
+    def test_adding_new_model_Profile(self):
+        password = 'newPassword'
+        newUser = User.objects.create_superuser('newUser','newUser@email.com', password)
+        newProfile = Profile()
+        newProfile.user = newUser
+        newProfile.save()
+        self.assertEqual('newUser',newProfile.user.username)
+        
     def test_saving_and_retrieving_lecture_title(self):
         firstLecture = Lecture()
         firstLecture.title = 'The first (ever) lecture title'

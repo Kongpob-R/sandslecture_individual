@@ -1,7 +1,7 @@
-from django.shortcuts import render
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from .forms import *
 from .models import Lecture,Profile,Lecture_img
@@ -10,10 +10,12 @@ from .models import Lecture,Profile,Lecture_img
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
+        print(form.is_valid())
         if form.is_valid():
-            form.save()
+            newUser = form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
+            Profile.objects.create(user = newUser)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('login')
