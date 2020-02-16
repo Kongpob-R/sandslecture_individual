@@ -35,18 +35,19 @@ def upload(request):
         if LectureForms1.is_valid() and  Lecture_imgForms1.is_valid():
             Lec=LectureForms1.save(commit=False)
             #Lectitle=Lecture_imgForms1.cleaned_data.get(title)
-            me=Lecture.objects.filter(title=LectureForms1.cleaned_data.get('title'))
-            for i in me:
-                L=Lecture_img.objects.filter(LectureKey=i)
-                v+=1
-                for i in L:
-                    i
+            title_object=Lecture.objects.filter(title=LectureForms1.cleaned_data.get('title'))
+            #subject_object
+            description_object=Lecture.objects.filter(title=LectureForms1.cleaned_data.get('description'))
+            if title_object==description_object:
+                for i in title_object:
+                    L=Lecture_img.objects.filter(LectureKey=i)
+                    v+=1
 
             #me=Lecture(title=LectureForms1.cleaned_data.get('title'),subject=LectureForms1.cleaned_data.get('subject'),description=LectureForms1.cleaned_data.get('description'))
             if v>0:
                 
                 #Saveimg=Lecture_img.objects.filter(LectureKey=me)
-                Manyimg= i.LectureKey
+                Manyimg= L[0].LectureKey
                 Lecture_img.objects.create(LectureKey=Manyimg,image=Lecture_imgForms1.cleaned_data.get('image')) 
                # Saveimg.LectureKey=me
                # Saveimg.save()

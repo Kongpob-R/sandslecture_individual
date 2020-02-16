@@ -10,7 +10,7 @@ class Profileform(ModelForm):
 class LectureForms(ModelForm):
    class Meta:
       model = Lecture
-      fields = ['title','subject','description']
+      fields = ['title','description']
 
 class Lecture_imgForms(ModelForm):
       class Meta:
