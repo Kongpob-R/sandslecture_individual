@@ -28,22 +28,22 @@
           <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
         </li>
         {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="/upload" id="navbar_upload">Upload</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/profile/{{user.username}}" id="navbar_username">{{ user.username }}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/accounts/logout" id="navbar_logout">Logout</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/upload" id="navbar_upload">Upload</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile/{{user.username}}" id="navbar_username">{{ user.username }}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/accounts/logout" id="navbar_logout">Logout</a>
+          </li>
         {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="/accounts/login" id="navbar_upload">Upload</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/accounts/login" id="navbar_login">Login</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/accounts/login" id="navbar_upload">Upload</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/accounts/login" id="navbar_login">Login</a>
+          </li>
         {% endif %}
       </ul>
       <form class="form-inline my-2 my-lg-0">

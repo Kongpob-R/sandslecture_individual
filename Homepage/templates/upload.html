@@ -1,37 +1,41 @@
-
 <body>
-<html>
-    <style>
-        div{background-color: lightgrey; width: 350px;  padding: 50px;  margin: 20px;}
-        .rightside{float: right;}
-
-        
-
-    </style>
-    <title>S&SLecture</title>
-     
-    <form method="post" enctype="multipart/form-data" >
-       {% csrf_token %}
-        <div>
-            {{Lecture}}
-        {% for i in Lecture_img %}
+    <html>
+        <style>
+            div{background-color: lightgrey; width: 350px;  padding: 50px;  margin: 20px;}
+            .rightside{float: right;}
+    
             
-            <img src="{{ i.image.url }}" height="100 width="100"><br>
-        {%endfor %}
-        </div>
-        <div>   
-
-
-            
-                {{form.as_p}}
+    
+        </style>
+        <title>S&SLecture</title>
+         
+        <form method="post" enctype="multipart/form-data" >
+           {% csrf_token %}
+            <div>
+                {{Lecture}}
+    
+            </div>
+            <div>   
+               
+    
+                {% csrf_token %}
+                <p><label for="id_image">Image:</label> <input type="file" name="image" accept="image/*" id="id_image" multiple></p>
+                    
+    
+    
+            </div>
+            <div>
+                {% for i in Lecture_img %}
                 
-
-
-        </div>
-            <input type="submit">
-    </form>
-
+                    <img src="{{ i.image.url }}" height="100 width="100"><br>
+                {%endfor %}
+                
+                
+            </div>
+                <input type="submit" value="Upload">
+        </form>
     
-    
-</html>
+        
+        
+    </html>
 </body>

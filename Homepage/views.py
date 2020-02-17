@@ -28,63 +28,64 @@ def home(request):
     return render(request, 'home.html')
 
 def upload(request):
+    r=1
     
-    if request.method == 'POST':
-        me=0
-        v=0
-        LectureForms1=LectureForms(request.POST)
-        Lecture_imgForms1 = Lecture_imgForms(request.POST,request.FILES)
-        if LectureForms1.is_valid() and  Lecture_imgForms1.is_valid():
-            Lec=LectureForms1.save(commit=False)
-            #Lectitle=Lecture_imgForms1.cleaned_data.get(title)
-            title_object=Lecture.objects.filter(title=LectureForms1.cleaned_data.get('title'),description=LectureForms1.cleaned_data.get('description'))
-            #subject_object
-            #description_object=Lecture.objects.filter(description=LectureForms1.cleaned_data.get('description'))
-            #if title_object==description_object:
-            for i in title_object:
-                L=Lecture_img.objects.filter(LectureKey=i)
-                v+=1
-
-            #me=Lecture(title=LectureForms1.cleaned_data.get('title'),subject=LectureForms1.cleaned_data.get('subject'),description=LectureForms1.cleaned_data.get('description'))
-            if v>0:
+    if request.user.is_authenticated==True:
+        Profile_Lec=Profile.objects.filter(user=request.user)
+        if request.method == 'POST' and request.FILES:
+            me=0
+            v=0
+            LectureForms1=LectureForms(request.POST)
+            Lecture_imgForms1 = Lecture_imgForms(request.POST,request.FILES)
+            if LectureForms1.is_valid() and  Lecture_imgForms1.is_valid():
                 
-                #Saveimg=Lecture_img.objects.filter(LectureKey=me)
-                Manyimg= L[0].LectureKey
-                Lecture_img.objects.create(LectureKey=Manyimg,image=Lecture_imgForms1.cleaned_data.get('image')) 
-               # Saveimg.LectureKey=me
-               # Saveimg.save()
-                Img_obj=Lecture_img.objects.all().filter(LectureKey=Manyimg)
-               
+                #Lectitle=Lecture_imgForms1.cleaned_data.get(title)
+                found_object=Lecture.objects.filter(title=LectureForms1.cleaned_data.get('title'),description=LectureForms1.cleaned_data.get('description'))
+                #subject_object
+                #description_object=Lecture.objects.filter(description=LectureForms1.cleaned_data.get('description'))
+                #if title_object==description_object:
+                for i in found_object:
+                    L=Lecture_img.objects.filter(LectureKey=i)
+                    v+=1
 
-            else:
-                Lec=LectureForms1.save()
-                Saveimg=Lecture_imgForms1.save(commit=False)
-                Saveimg.LectureKey=Lec
-                Saveimg.save()
+                #me=Lecture(title=LectureForms1.cleaned_data.get('title'),subject=LectureForms1.cleaned_data.get('subject'),description=LectureForms1.cleaned_data.get('description'))
+                if v>0:
+                    
+                    #Saveimg=Lecture_img.objects.filter(LectureKey=me)
+                    Lec=LectureForms1.save(commit=False)
+                    Lec.author=Profile_Lec[0]
+                    
+                    Manyimg= L[0].LectureKey
+                    Lecture_img.objects.create(LectureKey=Manyimg,image=Lecture_imgForms1.cleaned_data.get('image')) 
+                # Saveimg.LectureKey=me
+                # Saveimg.save()
+                    Img_obj=Lecture_img.objects.all().filter(LectureKey=Manyimg)
+                
+
+                else:
+                    Lec=LectureForms1.save(commit=False)
+                    Lec.author=Profile_Lec[0]
+                    Lec.save()
+                    Saveimg=Lecture_imgForms1.save(commit=False)
+                    Saveimg.LectureKey=Lec
+                    Saveimg.save()
+                
+                    Img_obj=Lecture_img.objects.all().filter(LectureKey=Lec)
+                
+
+                
+            return render(request, 'upload.html',{'form':Lecture_imgForms1 , 'Lecture':LectureForms1 , "Lecture_img":Img_obj , "title_object":found_object , "r":request.FILES})
             
-                Img_obj=Lecture_img.objects.all().filter(LectureKey=Lec)
-            
+            '''elif not request.FILES:
+            LectureForms1=LectureForms(request.POST)
+            Lecture_imgForms1 = Lecture_imgForms(request.POST,request.FILES)
+            if Lecture.objects.filter()
+            return render(request, 'upload.html',{'form':'Lecture_imgForms1' , 'Lecture':LectureForms1,"r":r})'''
 
-             
-            return render(request, 'upload.html',{'form':Lecture_imgForms1 , 'Lecture':LectureForms1 , "Lecture_img":Img_obj , "title_object":title_object})
-        
-
-    else:
-        Lecture_imgForms1=Lecture_imgForms()
-        LectureForms1=LectureForms()
-    return render(request, 'upload.html',{'form':Lecture_imgForms1 , 'Lecture':LectureForms1})
-
-    '''Lecture=LectureForms()
-    profileObj = Lecture_img.objects.get(id=1)
-    if request.FILES:
-        form=Lecture_imgForms(request.FILES)
-        if form.is_valid():
-            profileObj.image = form.cleaned_data.get('image')
-            profileObj.save()
-    else:
-        form=Lecture_imgForms()
-
-    return render(request, 'upload.html',{'form':form})'''
+        else:
+            Lecture_imgForms1=Lecture_imgForms()
+            LectureForms1=LectureForms()
+        return render(request, 'upload.html',{'form':Lecture_imgForms1 , 'Lecture':LectureForms1,"r":request.FILES})
 
 def lecture(request,lectue_id):
     pass
