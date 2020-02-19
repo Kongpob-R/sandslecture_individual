@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from .forms import *
 from .models import Lecture,Profile,Lecture_img
+from django.forms import modelformset_factory
 
 # Create your views here.
 def signup(request):
@@ -27,7 +28,38 @@ def signup(request):
 def home(request):
     return render(request, 'home.html')
 
-List_object_Lecture=[]
+def upload(request):
+    if Profile.objects.filter(user=request.user):
+        Profile_filter=Profile.objects.filter(user=request.user)
+        ImageFormSet=modelformset_factory(Lecture_img,form=Lecture_imgForms, extra=3)
+        if request.method == 'POST':
+
+            LectureForm = LectureForms(request.POST)
+            Imageform = ImageFormSet(request.POST,request.FILES,queryset=Lecture_img.objects.none())
+
+
+            if LectureForm.is_valid() and Imageform.is_valid():
+                LectureForm_title=LectureForm.cleaned_data.get('title')
+                LectureForm_description=LectureForm.cleaned_data.get('description')
+                LectureForm = LectureForm.save(commit=False)
+                LectureForm.author = Profile_filter[0] 
+                LectureForm.save()
+
+                for form in Imageform.cleaned_data:
+                    image = form['image']
+                    photo = Lecture_img(LectureKey=LectureForm , image=image)
+                    photo.save()
+                photo_filter=Lecture_img.objects.filter(LectureKey=LectureForm)
+
+                return render(request, 'lecture.html',{"photo":photo_filter , 'title':LectureForm_title , "description":LectureForm_description})          
+            else:
+                print(LectureForm.errors, Imageform.errors)
+        else:
+            LectureForm = LectureForms()
+            Imageform = ImageFormSet(queryset=Lecture_img.objects.none())
+        return render(request, 'upload.html',{'LectureForm': LectureForm, 'Imageform': Imageform})
+
+'''List_object_Lecture=[]
 List_object_image={}
 List_object_image_value_dirt=[]
 List_name_img=[]
@@ -97,7 +129,7 @@ def upload(request):
         else:
             Lecture_imgForms1=Lecture_imgForms()
             LectureForms1=LectureForms()
-            return render(request, 'upload.html',{'Image':Lecture_imgForms1 , 'Lecture':LectureForms1})
+            return render(request, 'upload.html',{'Image':Lecture_imgForms1 , 'Lecture':LectureForms1})'''
 
             
 

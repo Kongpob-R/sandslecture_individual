@@ -3,19 +3,24 @@
 {% block title %}S&SLecture{% endblock %}
 
 {% block content %}
-<body>
+
 
     <title>S&SLecture</title>
     <div>
+
+        {{title}}
         <br>
-    {% for i in Lecture_img %}
-        
-        <img src="{{ i.image.url }}" height="100 width="100"><br>
+        {{description}}
+            
+        <br>
+        {% for i in photo %}
+            
+            <img src="{{ i.image.url }}" height="100 width="100"><br>
 
 
-    {%endfor %}
-        
+        {%endfor %}
+            
 
     </div>
-</body>
+
 {% endblock %}
