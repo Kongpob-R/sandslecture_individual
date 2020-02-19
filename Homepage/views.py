@@ -30,8 +30,8 @@ def home(request):
 List_object_Lecture=[]
 List_object_image={}
 List_object_image_value_dirt=[]
-List_object_Lecture_Save=[]
-List_object_formImage=[]
+List_name_img=[]
+
 
 def upload(request):
     V=0
@@ -63,8 +63,9 @@ def upload(request):
                     Saveimg=Lecture_imgForms_upload.save()
                     #Saveimg.LectureKey=Lec
                     List_object_image_value_dirt.append(Saveimg)
+                List_name_img.append(Lecture_imgForms_upload.cleaned_data.get("image").name)
                 List_object_image.update({title_name:List_object_image_value_dirt})
-                return render(request, 'upload.html',{'Image':Lecture_imgForms_upload , 'Lecture':LectureForms_upload, 'L':List_object_Lecture ,"I":Lecture_imgForms_upload.cleaned_data.get("image") })
+                return render(request, 'upload.html',{'Image':Lecture_imgForms_upload , 'Lecture':LectureForms_upload, 'L':List_object_Lecture ,"I":List_name_img})
         elif request.method == 'POST' and 'submitbutton' in request.POST:
             
             LectureForms_upload_1=LectureForms(request.POST)
@@ -88,7 +89,11 @@ def upload(request):
                 
             Obj_Lec=Lecture.objects.filter(title=LectureForms_upload_1.cleaned_data.get('title'))
             Img_obj=Lecture_img.objects.all().filter(LectureKey=Obj_Lec[0])
-            return render(request, 'upload.html',{"Lecture_img":Img_obj, 'Lecture':LectureForms_upload_1 })
+            List_object_Lecture.clear()
+            List_object_image.clear()
+            List_object_image_value_dirt.clear() 
+            List_name_img.clear()
+            return render(request, 'lecture.html',{"Lecture_img":Img_obj, 'Lecture':LectureForms_upload_1 })
         else:
             Lecture_imgForms1=Lecture_imgForms()
             LectureForms1=LectureForms()

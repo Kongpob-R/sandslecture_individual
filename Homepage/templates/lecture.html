@@ -3,14 +3,19 @@
 {% block title %}S&SLecture{% endblock %}
 
 {% block content %}
-{% endblock %}
+<body>
 
-<div>
-    {% csrf_token %}
+    <title>S&SLecture</title>
+    <div>
+        <br>
     {% for i in Lecture_img %}
-    
+        
         <img src="{{ i.image.url }}" height="100 width="100"><br>
-    {%endfor %}
-    
 
-</div>
+
+    {%endfor %}
+        
+
+    </div>
+</body>
+{% endblock %}
