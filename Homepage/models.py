@@ -22,7 +22,12 @@ class Lecture(models.Model):
     description = models.CharField(max_length=2000,null=True)
     author = models.ForeignKey(Profile, on_delete=models.CASCADE,blank=True,null=True)
     #image = models.ImageField(upload_to='lecture_image',blank=True)
+    def __str__(self):
+        return self.title
 class Lecture_img(models.Model):
     LectureKey = models.ForeignKey(Lecture, on_delete=models.CASCADE,blank=True,null=True)
     image = models.ImageField(upload_to='lecture_image',blank=True)
+    def __str__(self):
+        return self.image.name
+
     

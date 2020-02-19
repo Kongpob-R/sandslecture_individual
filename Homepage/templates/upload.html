@@ -20,7 +20,7 @@
     
                 {% csrf_token %}
                 <p><label for="id_image">Image:</label> <input type="file" name="image" accept="image/*" id="id_image" multiple></p>
-                    
+                <input type="submit" name="uploadbutton" value="Upload">
     
     
             </div>
@@ -29,10 +29,10 @@
                 
                     <img src="{{ i.image.url }}" height="100 width="100"><br>
                 {%endfor %}
-                
-                
+                {{I}}
             </div>
-                <input type="submit" value="Upload">
+                
+                <input type="submit" name="submitbutton" value="Submit">
         </form>
     
         

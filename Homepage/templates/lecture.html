@@ -4,3 +4,13 @@
 
 {% block content %}
 {% endblock %}
+
+<div>
+    {% csrf_token %}
+    {% for i in Lecture_img %}
+    
+        <img src="{{ i.image.url }}" height="100 width="100"><br>
+    {%endfor %}
+    
+
+</div>
