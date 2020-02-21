@@ -21,10 +21,9 @@
 
                 {{LectureForm}}
 
-                {{ Imageform.management_form }}
-                {% for form in Imageform %}
-                    {{ form }}
-                {% endfor %}
+                <tr><th><label for="id_image">Image:</label></th><td><input type="file" name="image" accept="image/*" id="id_image" multiple></td></tr>
+                
+                {{Error}}
                 
     
             </div>

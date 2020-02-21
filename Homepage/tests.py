@@ -10,7 +10,7 @@ from sandslecture.settings import BASE_DIR
 
 class HomePageTest(TestCase):
 
-    def test_adding_new_model_Profile(self):
+    '''def test_adding_new_model_Profile(self):
         password = 'newPassword'
         newUser = User.objects.create_superuser('newUser','newUser@email.com', password)
         newProfile = Profile()
@@ -89,6 +89,7 @@ class HomePageTest(TestCase):
         c = Client()
         
         localtion=BASE_DIR
+        response = c.post('/upload/', {'username':'Timmy','password':"2542" } ) 
         response = c.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
         CountLec=Lecture.objects.count()
         Count_object=Lecture_img.objects.count()
@@ -99,15 +100,18 @@ class HomePageTest(TestCase):
         self.assertEqual(CountLec,1)
         self.assertEqual(Count_object,1)
         self.assertEqual(response.status_code,200)
-        #self.assertEqual(field_value, 1)
+        #self.assertEqual(field_value, 1)'''
 
-    def test_upload_Lecture_many_to_one(self):
+    def test_upload_Lecture(self):
         c=Client()
         localtion=BASE_DIR
-        response = c.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} )
-        response2 = c.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666888.png', content=open(localtion+'/red.png', 'rb').read())} )
+        Tim=User.objects.create_user(username='tim',password='pass')
+        ProfileTim=Profile.objects.create(user=Tim)
+        self.client.login(username='tim', password='pass')
+        #c.post('/accounts/login/', {'username':'tim','password':"pass" } ) 
+        self.client.post('/upload/', {'title':'tim','description':"555" ,'form-0-image':SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read()),'form-1-image':SimpleUploadedFile('666_2.png', content=open(localtion+'/red.png', 'rb').read()),'form-2-image':SimpleUploadedFile('666_3.png', content=open(localtion+'/red.png', 'rb').read())} )
         CountLec=Lecture.objects.count()
         Count_object_img=Lecture_img.objects.count()
         self.assertEqual(CountLec,1)
-        self.assertEqual(Count_object_img,2)
-        self.assertEqual(response2.status_code,200)
+        self.assertEqual(Count_object_img,3)
+       

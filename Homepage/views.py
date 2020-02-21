@@ -30,34 +30,41 @@ def home(request):
 
 def upload(request):
     if Profile.objects.filter(user=request.user):
+        files=[]
         Profile_filter=Profile.objects.filter(user=request.user)
-        ImageFormSet=modelformset_factory(Lecture_img,form=Lecture_imgForms, extra=3)
+        #ImageFormSet=modelformset_factory(Lecture_img,form=Lecture_imgForms, extra=1)
         if request.method == 'POST':
+            
+                #for file in request.FILES:
+               #files.append(request.FILES['form-0-image'])
 
             LectureForm = LectureForms(request.POST)
-            Imageform = ImageFormSet(request.POST,request.FILES,queryset=Lecture_img.objects.none())
+            #Imageform = Lecture_imgForms(request.POST,request.FILES['image'])
 
 
-            if LectureForm.is_valid() and Imageform.is_valid():
+            if LectureForm.is_valid() and request.FILES :
                 LectureForm_title=LectureForm.cleaned_data.get('title')
                 LectureForm_description=LectureForm.cleaned_data.get('description')
                 LectureForm = LectureForm.save(commit=False)
                 LectureForm.author = Profile_filter[0] 
                 LectureForm.save()
 
-                for form in Imageform.cleaned_data:
-                    image = form['image']
-                    photo = Lecture_img(LectureKey=LectureForm , image=image)
+                for i in request.FILES.getlist('image'):
+      
+
+                    photo = Lecture_img.objects.create(LectureKey=LectureForm , image=i)
                     photo.save()
                 photo_filter=Lecture_img.objects.filter(LectureKey=LectureForm)
 
-                return render(request, 'lecture.html',{"photo":photo_filter , 'title':LectureForm_title , "description":LectureForm_description})          
+                return render(request, 'lecture.html',{"photo":photo_filter , 'title':LectureForm_title , "description":LectureForm_description , "files":files})          
             else:
-                print(LectureForm.errors, Imageform.errors)
+
+                Error="Please choose your file"
         else:
             LectureForm = LectureForms()
-            Imageform = ImageFormSet(queryset=Lecture_img.objects.none())
-        return render(request, 'upload.html',{'LectureForm': LectureForm, 'Imageform': Imageform})
+            Imageform = Lecture_imgForms()
+            Error=""
+        return render(request, 'upload.html',{'LectureForm': LectureForm,"Error":Error})
 
 '''List_object_Lecture=[]
 List_object_image={}
