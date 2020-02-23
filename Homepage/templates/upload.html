@@ -1,38 +1,36 @@
 <body>
     <html>
-        <style>
-            div{background-color: lightgrey; width: 350px;  padding: 50px;  margin: 20px;}
-            .rightside{float: right;}
-    
-            
-    
-        </style>
-        <title>S&SLecture</title>
-         
-        <form method="post" enctype="multipart/form-data" >
-            <div>   
-               
-    
-                
-                {% csrf_token %}
-                {% for hidden in LectureForm.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
+        {% extends 'base.html' %}
 
-                {{LectureForm}}
+        {% block title %}S&SLecture Profile{% endblock %}
+            {% block content %}
+            <title>S&SLecture</title>
+                    
+                    <form method="post" enctype="multipart/form-data" >
+                        <div>   
+                        
+                
+                            
+                            {% csrf_token %}
+                            {% for hidden in LectureForm.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
 
-                <tr><th><label for="id_image">Image:</label></th><td><input type="file" name="image" accept="image/*" id="id_image" multiple></td></tr>
-                
-                {{Error}}
-                
-    
-            </div>
+                            {{LectureForm}}
 
+                            <tr><th><label for="id_image">Image:</label></th><td><input type="file" name="image" accept="image/*" id="id_image" multiple></td></tr>
+                            
+                            {{Error}}
+                            
                 
-                <input type="submit" name="submitbutton" value="Submit">
-        </form>
-    
+                        </div>
+
+                            <input type="submit" name="Clearbutton" value="Clear">
+                            <input type="submit" name="submitbutton" value="Submit">
+                            
+                    </form>
         
+        {% endblock %}
         
     </html>
 </body>

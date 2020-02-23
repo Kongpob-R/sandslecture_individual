@@ -107,11 +107,21 @@ class HomePageTest(TestCase):
         localtion=BASE_DIR
         Tim=User.objects.create_user(username='tim',password='pass')
         ProfileTim=Profile.objects.create(user=Tim)
-        self.client.login(username='tim', password='pass')
-        #c.post('/accounts/login/', {'username':'tim','password':"pass" } ) 
-        self.client.post('/upload/', {'title':'tim','description':"555" ,'form-0-image':SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read()),'form-1-image':SimpleUploadedFile('666_2.png', content=open(localtion+'/red.png', 'rb').read()),'form-2-image':SimpleUploadedFile('666_3.png', content=open(localtion+'/red.png', 'rb').read())} )
-        CountLec=Lecture.objects.count()
-        Count_object_img=Lecture_img.objects.count()
-        self.assertEqual(CountLec,1)
-        self.assertEqual(Count_object_img,3)
+        #self.client.login(username='tim', password='pass')
+        self.client.post('/accounts/login/', {'username':'tim','password':"pass" } ) 
+        self.client.post('/upload/', {'submitbutton':'Submit','title':'tim','description':"555" ,'image':{SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read()),SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read())}} )
+        self.assertEqual(Lecture.objects.count(),1)
+        self.assertEqual(Lecture_img.objects.count(),2)
+    '''def test_button_upload_Clear(self):
+        c=Client()
+        localtion=BASE_DIR
+        Tim=User.objects.create_user(username='tim',password='pass')
+        ProfileTim=Profile.objects.create(user=Tim)
+        #self.client.login(username='tim', password='pass')
+        self.client.post('/accounts/login/', {'username':'tim','password':"pass" } ) 
+        response = self.client.post('/upload/', {'Clearbutton':'Clear','title':'tim','description':"555" ,'image':SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read())} )
+        #self.assertContains( response, {"title" :""}, status_code=200 )
+        self.assertEqual(response.content["title"],1)
+        self.assertEqual(Lecture_img.objects.count(),1)'''
+
        

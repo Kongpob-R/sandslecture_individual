@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from .forms import *
 from .models import Lecture,Profile,Lecture_img
 from django.forms import modelformset_factory
+from django.http import Http404
 
 # Create your views here.
 def signup(request):
@@ -33,7 +34,7 @@ def upload(request):
         files=[]
         Profile_filter=Profile.objects.filter(user=request.user)
         #ImageFormSet=modelformset_factory(Lecture_img,form=Lecture_imgForms, extra=1)
-        if request.method == 'POST':
+        if request.method == 'POST' and 'submitbutton' in request.POST:
             
                 #for file in request.FILES:
                #files.append(request.FILES['form-0-image'])
@@ -60,11 +61,18 @@ def upload(request):
             else:
 
                 Error="Please choose your file"
+        elif  request.method == 'POST' and 'Clearbutton' in request.POST:
+            LectureForm = LectureForms()
+            Imageform = Lecture_imgForms()
+            Error=""
         else:
             LectureForm = LectureForms()
             Imageform = Lecture_imgForms()
             Error=""
         return render(request, 'upload.html',{'LectureForm': LectureForm,"Error":Error})
+    else:
+        #Http404("Profile does not found")
+        raise Http404("Profile does not found")
 
 '''List_object_Lecture=[]
 List_object_image={}
