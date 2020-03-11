@@ -66,13 +66,14 @@
             </div>
 
             <div class="row">
+                {% for note in noteWithThumbnail %}
                 <div class="col-md-3">
                     <div class="card mb-4 box-shadow">
 
                         <!-- Card image -->
                         <div class="view overlay">
                             <img class="card-img-top"
-                                src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg"
+                                src="{{ note.thumbnail.image.url }}"
                                 alt="Card image cap">
                             <a href="#!">
                                 <div class="mask rgba-white-slight"></div>
@@ -83,13 +84,13 @@
                         <div class="card-body">
 
                             <!-- Title -->
-                            <h4 class="card-title">Card title</h4>
+                            <h4 class="card-title">{{ note.note.title }}</h4>
 
                             <!-- Username -->
                             <a class="subinfo__author" href="#">
-                                <img class="subinfo__author__img" alt="ผู้เยี่ยมชม"
-                                    src="https://s3-ap-northeast-1.amazonaws.com/image.speedy-edu.com/uploads/user/avatar/1191784/thumb_m_3e1ecd3a31.jpg">
-                                <span class="subinfo__author__name">Username</span>
+                                <img class="subinfo__author__img" alt="image not found" style="vertical-align: middle; width: 50px; height: 50px; border-radius: 50%;"
+                                    src="{{ note.note.author.profilePicture.url }}">
+                                <span class="subinfo__author__name">{{ note.note.author }}</span>
                             </a>
 
                             <!-- Views -->
@@ -98,6 +99,7 @@
                         </div>
                     </div>
                 </div>
+                {% endfor%}
             </div>
         </div>
     </div>

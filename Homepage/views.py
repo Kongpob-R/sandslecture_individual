@@ -8,6 +8,11 @@ from .models import Lecture,Profile,Lecture_img
 from django.forms import modelformset_factory
 from django.http import Http404
 
+class NoteWithThumbnail:
+    def __init__(self, note, thumbnail):
+        self.note = note
+        self.thumbnail = thumbnail
+
 # Create your views here.
 def signup(request):
     if request.method == 'POST':
@@ -27,7 +32,10 @@ def signup(request):
 
 
 def home(request):
-    return render(request, 'home.html')
+    noteWithThumbnail = []
+    for note in Lecture.objects.all():
+        noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
+    return render(request, 'home.html',{'noteWithThumbnail':noteWithThumbnail})
 
 def upload(request):
     if Profile.objects.filter(user=request.user):
