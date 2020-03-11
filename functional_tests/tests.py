@@ -82,15 +82,22 @@ class NewVisitorTest(LiveServerTestCase):
         file_input.send_keys(absolute_file_path)
 
         # He filling the form and click upload
+        noteTitle = 'Networking fundamental'
         title_textbox = self.browser.find_element_by_id('id_title')
-        title_textbox.send_keys('Networking fundamental')
+        title_textbox.send_keys(noteTitle)
         description_textbox = self.browser.find_element_by_id('id_description')
         description_textbox.send_keys('Fundamental concept of computer network explained')
         upload_button = self.browser.find_element_by_name('submitbutton')
         upload_button.send_keys(Keys.ENTER) 
 
         # the page redirect to homepage
+        self.wait_for_page_to_render_text_in_id('','HomepageMainArea')
+
         # He found his lecture showing up
+        self.wait_for_page_to_render_text_in_id(noteTitle,'latestNote1')
+
         # He click logout
+        self.assertIn('navbar_logout', self.browser.page_source)
+        self.browser.find_element_by_id('navbar_logout').send_keys(Keys.ENTER)
 
         self.fail('Finish the test!')
