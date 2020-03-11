@@ -5,8 +5,9 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 import time
+import os
 class NewVisitorTest(LiveServerTestCase):  
-    MAX_WAIT = 10  
+    MAX_WAIT = 15  
 
     def setUp(self):  
         self.browser = webdriver.Firefox()
@@ -76,9 +77,18 @@ class NewVisitorTest(LiveServerTestCase):
         self.wait_for_page_to_render_text_in_id('','UploadpageMainArea')
 
         # He start adding photo of the lecture to the given form
-        # He filling some of the form and click upload
-        # the page is not allow him upload because some field are still empty
-        # He fillup the rest of the form and click upload again
+        absolute_file_path = os.path.abspath("red.png")
+        file_input = self.browser.find_element_by_id("id_image")
+        file_input.send_keys(absolute_file_path)
+
+        # He filling the form and click upload
+        title_textbox = self.browser.find_element_by_id('id_title')
+        title_textbox.send_keys('Networking fundamental')
+        description_textbox = self.browser.find_element_by_id('id_description')
+        description_textbox.send_keys('Fundamental concept of computer network explained')
+        upload_button = self.browser.find_element_by_name('submitbutton')
+        upload_button.send_keys(Keys.ENTER) 
+
         # the page redirect to homepage
         # He found his lecture showing up
         # He click logout
