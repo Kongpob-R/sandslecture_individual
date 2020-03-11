@@ -1,5 +1,6 @@
 from django.test import LiveServerTestCase
 from django.contrib.auth.models import AnonymousUser, User
+from Homepage.models import Lecture, Profile, Lecture_img
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
@@ -10,6 +11,7 @@ class NewVisitorTest(LiveServerTestCase):
     def setUp(self):  
         self.browser = webdriver.Firefox()
         self.user = User.objects.create_user(username='steve', email='steve@email.com', password='123456')
+        Profile.objects.create(user = self.user)
 
     def tearDown(self):  
         self.browser.quit()
@@ -26,7 +28,7 @@ class NewVisitorTest(LiveServerTestCase):
                     raise e  
                 time.sleep(0.5)
 
-    '''def test_Steve_uploading_a_lecture(self):
+    def test_Steve_uploading_a_lecture(self):
         # Steve's friends invite Steve visit their new lecture sharing site named Save&Share lecture
         # Steve's friends register an account for him and give him username and password of the site
         steveAccount = self.user
@@ -81,4 +83,4 @@ class NewVisitorTest(LiveServerTestCase):
         # He found his lecture showing up
         # He click logout
 
-        self.fail('Finish the test!')  '''
+        self.fail('Finish the test!')
