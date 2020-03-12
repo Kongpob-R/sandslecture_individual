@@ -40,22 +40,18 @@ def home(request):
 def upload(request):
     if Profile.objects.filter(user=request.user):
         files=[]
-        Profile_filter=Profile.objects.filter(user=request.user)
+        profileObj = Profile.objects.get(user=request.user)
         #ImageFormSet=modelformset_factory(Lecture_img,form=Lecture_imgForms, extra=1)
-        if request.method == 'POST' and 'submitbutton' in request.POST:
+        if request.method == 'POST':
             
                 #for file in request.FILES:
                #files.append(request.FILES['form-0-image'])
 
             LectureForm = LectureForms(request.POST)
             #Imageform = Lecture_imgForms(request.POST,request.FILES['image'])
-
-
-            if LectureForm.is_valid() and request.FILES:
-                LectureForm_title=LectureForm.cleaned_data.get('title')
-                LectureForm_description=LectureForm.cleaned_data.get('description')
+            if LectureForm.is_valid():
                 LectureForm = LectureForm.save(commit=False)
-                LectureForm.author = Profile_filter[0] 
+                LectureForm.author = profileObj
                 LectureForm.save()
 
                 for i in request.FILES.getlist('image'):
@@ -70,7 +66,6 @@ def upload(request):
 
         else:
             LectureForm = LectureForms()
-            Imageform = Lecture_imgForms()
             Error=""
 
         return render(request, 'upload.html',{'LectureForm': LectureForm,"Error":Error})
