@@ -83,12 +83,13 @@ class NewVisitorTest(LiveServerTestCase):
 
         # He filling the form and click upload
         noteTitle = 'Networking fundamental'
+
         title_textbox = self.browser.find_element_by_id('id_title')
         title_textbox.send_keys(noteTitle)
         description_textbox = self.browser.find_element_by_id('id_description')
         description_textbox.send_keys('Fundamental concept of computer network explained')
-        upload_button = self.browser.find_element_by_name('submitbutton')
-        upload_button.send_keys(Keys.ENTER) 
+        submit_button = self.browser.find_element_by_id('submitbutton')
+        submit_button.click()
 
         # the page redirect to homepage
         self.wait_for_page_to_render_text_in_id('','HomepageMainArea')

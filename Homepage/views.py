@@ -51,7 +51,7 @@ def upload(request):
             #Imageform = Lecture_imgForms(request.POST,request.FILES['image'])
 
 
-            if LectureForm.is_valid() and request.FILES :
+            if LectureForm.is_valid() and request.FILES:
                 LectureForm_title=LectureForm.cleaned_data.get('title')
                 LectureForm_description=LectureForm.cleaned_data.get('description')
                 LectureForm = LectureForm.save(commit=False)
@@ -59,25 +59,22 @@ def upload(request):
                 LectureForm.save()
 
                 for i in request.FILES.getlist('image'):
-      
-
                     photo = Lecture_img.objects.create(LectureKey=LectureForm , image=i)
                     photo.save()
-                photo_filter=Lecture_img.objects.filter(LectureKey=LectureForm)
 
-                return render(request, 'lecture.html',{"photo":photo_filter , 'title':LectureForm_title , "description":LectureForm_description , "files":files})          
+                # redirect to homepage
+                return redirect('/')
+
             else:
-
                 Error="Please choose your file"
-        elif  request.method == 'POST' and 'Clearbutton' in request.POST:
-            LectureForm = LectureForms()
-            Imageform = Lecture_imgForms()
-            Error=""
+
         else:
             LectureForm = LectureForms()
             Imageform = Lecture_imgForms()
             Error=""
+
         return render(request, 'upload.html',{'LectureForm': LectureForm,"Error":Error})
+
     else:
         #Http404("Profile does not found")
         raise Http404("Profile does not found")
