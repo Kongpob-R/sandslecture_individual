@@ -30,12 +30,18 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
-
 def home(request):
     noteWithThumbnail = []
-    for note in Lecture.objects.all().order_by('-id')[:8][::-1]:
-        noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
-    return render(request, 'home.html',{'noteWithThumbnail':noteWithThumbnail})
+    if request.GET.get('word'):
+        keyword = request.GET.get('word')
+        for note in Lecture.objects.all():
+            if keyword in note.title or keyword in note.description:
+                noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
+        return render(request, 'searchresult.html',{'noteWithThumbnail':noteWithThumbnail})
+    else:
+        for note in Lecture.objects.all().order_by('-id')[:8][::-1]:
+            noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
+        return render(request, 'home.html',{'noteWithThumbnail':noteWithThumbnail})
 
 def upload(request):
     if Profile.objects.filter(user=request.user):
@@ -73,6 +79,27 @@ def upload(request):
     else:
         #Http404("Profile does not found")
         raise Http404("Profile does not found")
+
+def lecture(request,lectue_id):
+    pass
+
+def profile(request, username):
+    userObj = User.objects.get(username = username)
+    profileObj = Profile.objects.get(user = userObj)
+    if request.method == 'POST':
+        form=Profileform(request.POST , request.FILES)
+        if form.is_valid():
+            profileObj.profilePicture = form.cleaned_data.get('profilePicture')
+            profileObj.save()
+            
+            return HttpResponseRedirect("/profile/"+username)
+    else:
+        form=Profileform()
+        myNote = []
+        for note in Lecture.objects.filter(author = profileObj):
+            myNote.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
+    return render(request,'profile.html',{'form': form, 'profile': profileObj, 'myNote': myNote})
+
 
 '''List_object_Lecture=[]
 List_object_image={}
@@ -145,27 +172,3 @@ def upload(request):
             Lecture_imgForms1=Lecture_imgForms()
             LectureForms1=LectureForms()
             return render(request, 'upload.html',{'Image':Lecture_imgForms1 , 'Lecture':LectureForms1})'''
-
-            
-
-
-def lecture(request,lectue_id):
-    pass
-
-def profile(request, username):
-    userObj = User.objects.get(username = username)
-    profileObj = Profile.objects.get(user = userObj)
-    if request.method == 'POST':
-        form=Profileform(request.POST , request.FILES)
-        if form.is_valid():
-            profileObj.profilePicture = form.cleaned_data.get('profilePicture')
-            profileObj.save()
-            
-            return HttpResponseRedirect("/profile/"+username)
-    else:
-        form=Profileform()
-        myNote = []
-        for note in Lecture.objects.filter(author = profileObj):
-            myNote.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
-    return render(request,'profile.html',{'form': form, 'profile': profileObj, 'myNote': myNote})
-
