@@ -33,7 +33,7 @@ def signup(request):
 
 def home(request):
     noteWithThumbnail = []
-    for note in Lecture.objects.all():
+    for note in Lecture.objects.all().order_by('-id')[:8][::-1]:
         noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
     return render(request, 'home.html',{'noteWithThumbnail':noteWithThumbnail})
 
