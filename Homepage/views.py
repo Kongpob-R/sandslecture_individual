@@ -164,5 +164,8 @@ def profile(request, username):
             return HttpResponseRedirect("/profile/"+username)
     else:
         form=Profileform()
-    return render(request,'profile.html',{'form': form, 'profile': profileObj})
+        myNote = []
+        for note in Lecture.objects.filter(author = profileObj):
+            myNote.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
+    return render(request,'profile.html',{'form': form, 'profile': profileObj, 'myNote': myNote})
 
