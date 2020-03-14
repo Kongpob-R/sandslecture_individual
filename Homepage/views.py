@@ -81,9 +81,17 @@ def upload(request):
         raise Http404("Profile does not found")
 
 def lecture(request,lecture_id):
-    noteObj = Lecture.objects.get(id = lecture_id)
-    imageObjList = noteObj.Lecture_img.all()
-    return render(request, 'notedetail.html',{'noteObj': noteObj, "imageObjList": imageObjList})
+    if request.method == 'POST':
+        profileObj = Profile.objects.get(user = request.user)
+        noteObj = Lecture.objects.get(id = int(request.POST.get('noteID')))
+        if profileObj not in noteObj.userSaved.all():
+            noteObj.userSaved.add(profileObj)
+            noteObj.save()
+        return HttpResponseRedirect("/" + request.POST.get('noteID'))
+    else:
+        noteObj = Lecture.objects.get(id = lecture_id)
+        imageObjList = noteObj.Lecture_img.all()
+        return render(request, 'notedetail.html',{'noteObj': noteObj, "imageObjList": imageObjList})
 
 def profile(request, username):
     userObj = User.objects.get(username = username)
@@ -103,10 +111,10 @@ def profile(request, username):
         for note in profileObj.author.all():
             myNote.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
             saves += note.userSaved.count()
+        for note in Lecture.objects.all():
             if profileObj in note.userSaved.all():
                 savedNote.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
     return render(request,'profile.html',{'form': form, 'profile': profileObj, 'myNote': myNote, 'savedNote':savedNote, 'saves':saves})
-
 
 '''List_object_Lecture=[]
 List_object_image={}

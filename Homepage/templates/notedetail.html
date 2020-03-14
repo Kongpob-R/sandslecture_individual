@@ -4,21 +4,27 @@
 
 {% block content %}
 
-    <div>
+{% if user.username != noteObj.author.user.username %}
+<form action="" method="post">
+    {% csrf_token %}
+    <button type="summit" name="noteID" value="{{ noteObj.id }}">Save Note</button>
+</form>
+{% endif %}
+<div>
 
-        {{ noteObj.title }}
-        <br>
-        {{ noteObj.description }}
-            
-        <br>
-        {% for image in imageObjList %}
-            
-            <img src="{{ image.image.url }}"><br>
+    {{ noteObj.title }}
+    <br>
+    {{ noteObj.description }}
+
+    <br>
+    {% for image in imageObjList %}
+
+    <img src="{{ image.image.url }}"><br>
 
 
-        {%endfor %}
-            
-        
-    </div>
+    {%endfor %}
+
+
+</div>
 
 {% endblock %}
