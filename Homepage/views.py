@@ -7,6 +7,7 @@ from .forms import *
 from .models import Lecture,Profile,Lecture_img
 from django.forms import modelformset_factory
 from django.http import Http404
+from django.db.models import Count
 
 class NoteWithThumbnail:
     def __init__(self, note, thumbnail):
@@ -32,6 +33,8 @@ def signup(request):
 
 def home(request):
     noteWithThumbnail = []
+    latestNote = []
+    popularNote = []
     if request.GET.get('word'):
         keyword = request.GET.get('word')
         for note in Lecture.objects.all():
@@ -40,8 +43,12 @@ def home(request):
         return render(request, 'searchresult.html',{'noteWithThumbnail':noteWithThumbnail})
     else:
         for note in Lecture.objects.all().order_by('-id')[:8][::-1]:
-            noteWithThumbnail.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
-        return render(request, 'home.html',{'noteWithThumbnail':noteWithThumbnail})
+            latestNote.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
+        
+        for note in Lecture.objects.annotate(count=Count('userSaved')).order_by('count')[:8][::-1]:
+            popularNote.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
+
+        return render(request, 'home.html',{'latestNote':latestNote, 'popularNote':popularNote})
 
 def upload(request):
     if Profile.objects.filter(user=request.user):

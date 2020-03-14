@@ -15,41 +15,7 @@
                 <br>
             </div>
 
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card mb-4 box-shadow">
-
-                        <!-- Card image -->
-                        <div class="view overlay">
-                            <img class="card-img-top"
-                                src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg"
-                                alt="Card image cap">
-                            <a href="#!">
-                                <div class="mask rgba-white-slight"></div>
-                            </a>
-                        </div>
-
-                        <!-- Card content -->
-                        <div class="card-body">
-
-                            <!-- Title -->
-                            <h4 class="card-title">Card title</h4>
-
-                            <!-- Username -->
-                            <a class="subinfo__author" href="#">
-                                <img class="subinfo__author__img" alt="ผู้เยี่ยมชม"
-                                    src="https://s3-ap-northeast-1.amazonaws.com/image.speedy-edu.com/uploads/user/avatar/1191784/thumb_m_3e1ecd3a31.jpg">
-                                <span class="subinfo__author__name">Username</span>
-                            </a>
-
-                            <!-- Views -->
-                            <p class="card-text">Views</p>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            {% include "noteCardTem.html" with noteObjList=popularNote only %}
         </div>
     </div>
 
@@ -65,7 +31,7 @@
                 <br>
             </div>
 
-            {% include "noteCardTem.html" with noteObjList=noteWithThumbnail only %}
+            {% include "noteCardTem.html" with noteObjList=latestNote only %}
         </div>
     </div>
 
