@@ -15,8 +15,9 @@
                 src="https://s3-ap-northeast-1.amazonaws.com/image.speedy-edu.com/uploads/user/avatar/1191784/thumb_m_3e1ecd3a31.jpg">
             {% endif %}
             <br>
-            <h1>{{user.username}}</h1>
-            
+            <h1>{{ profile.user.username }}</h1>
+
+            {% if user.username == profile.user.username%}
             <form method="post" enctype="multipart/form-data" id="profilePictureForm">
                 {% csrf_token %}
                 <div class="file btn btn-md btn-primary" style="position: relative;overflow: hidden;">
@@ -25,6 +26,8 @@
                     style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;">
                 </div>
             </form>
+            {% endif %}
+            
             <p>Saved {{ savedNote|length }} Notes</p>
             <p>Shared {{ myNote|length }} Notes</p>
             <p>Total {{ saves }} Note saves</p>
