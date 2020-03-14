@@ -82,7 +82,7 @@ def upload(request):
 
 def lecture(request,lecture_id):
     noteObj = Lecture.objects.get(id = lecture_id)
-    imageObjList = Lecture_img.objects.filter(LectureKey = noteObj)
+    imageObjList = noteObj.Lecture_img.all()
     return render(request, 'notedetail.html',{'noteObj': noteObj, "imageObjList": imageObjList})
 
 def profile(request, username):
