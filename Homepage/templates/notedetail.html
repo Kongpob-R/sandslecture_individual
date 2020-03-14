@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}S&SLecture Note{% endblock %}
+
+{% block content %}
+
+    <div>
+
+        {{ noteObj.title }}
+        <br>
+        {{ noteObj.description }}
+            
+        <br>
+        {% for image in imageObjList %}
+            
+            <img src="{{ image.image.url }}"><br>
+
+
+        {%endfor %}
+            
+        
+    </div>
+
+{% endblock %}

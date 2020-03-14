@@ -36,11 +36,11 @@ def home(request):
         keyword = request.GET.get('word')
         for note in Lecture.objects.all():
             if keyword in note.title or keyword in note.description:
-                noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
+                noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.filter(LectureKey = note)[0]))
         return render(request, 'searchresult.html',{'noteWithThumbnail':noteWithThumbnail})
     else:
         for note in Lecture.objects.all().order_by('-id')[:8][::-1]:
-            noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
+            noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.filter(LectureKey = note)[0]))
         return render(request, 'home.html',{'noteWithThumbnail':noteWithThumbnail})
 
 def upload(request):
@@ -80,8 +80,10 @@ def upload(request):
         #Http404("Profile does not found")
         raise Http404("Profile does not found")
 
-def lecture(request,lectue_id):
-    pass
+def lecture(request,lecture_id):
+    noteObj = Lecture.objects.get(id = lecture_id)
+    imageObjList = Lecture_img.objects.filter(LectureKey = noteObj)
+    return render(request, 'notedetail.html',{'noteObj': noteObj, "imageObjList": imageObjList})
 
 def profile(request, username):
     userObj = User.objects.get(username = username)
