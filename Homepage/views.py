@@ -36,9 +36,9 @@ def home(request):
     latestNote = []
     popularNote = []
     if request.GET.get('word'):
-        keyword = request.GET.get('word')
+        keyword = request.GET.get('word').lower()
         for note in Lecture.objects.all():
-            if keyword in note.title or keyword in note.description:
+            if keyword in note.title.lower() or keyword in note.description.lower():
                 noteWithThumbnail.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
         return render(request, 'searchresult.html',{'noteWithThumbnail':noteWithThumbnail})
     else:
