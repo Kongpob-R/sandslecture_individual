@@ -36,11 +36,11 @@ def home(request):
         keyword = request.GET.get('word')
         for note in Lecture.objects.all():
             if keyword in note.title or keyword in note.description:
-                noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.filter(LectureKey = note)[0]))
+                noteWithThumbnail.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
         return render(request, 'searchresult.html',{'noteWithThumbnail':noteWithThumbnail})
     else:
         for note in Lecture.objects.all().order_by('-id')[:8][::-1]:
-            noteWithThumbnail.append(NoteWithThumbnail(note, Lecture_img.objects.filter(LectureKey = note)[0]))
+            noteWithThumbnail.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
         return render(request, 'home.html',{'noteWithThumbnail':noteWithThumbnail})
 
 def upload(request):
@@ -98,9 +98,14 @@ def profile(request, username):
     else:
         form=Profileform()
         myNote = []
-        for note in Lecture.objects.filter(author = profileObj):
-            myNote.append(NoteWithThumbnail(note, Lecture_img.objects.get(LectureKey = note)))
-    return render(request,'profile.html',{'form': form, 'profile': profileObj, 'myNote': myNote})
+        savedNote = []
+        saves = 0
+        for note in profileObj.author.all():
+            myNote.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
+            saves += note.userSaved.count()
+            if profileObj in note.userSaved.all():
+                savedNote.append(NoteWithThumbnail(note, note.Lecture_img.all()[0]))
+    return render(request,'profile.html',{'form': form, 'profile': profileObj, 'myNote': myNote, 'savedNote':savedNote, 'saves':saves})
 
 
 '''List_object_Lecture=[]

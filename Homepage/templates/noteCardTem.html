@@ -8,7 +8,7 @@
             </div>
 
             <div class="card-body">
-                <a class="text-dark btn" href="{{ note.note.id }}">
+                <a class="text-dark btn" href="/{{ note.note.id }}">
                     <h4 class="card-title" id="latestNote{{ forloop.counter }}">{{ note.note.title }}</h4>
                 </a>
 
@@ -27,7 +27,7 @@
                     </a>
                 </p>
 
-                <p class="card-text">Views</p>
+                <p class="card-text">{{ note.note.userSaved.count }} Saves</p>
 
 
             </div>

@@ -16,26 +16,29 @@
             {% endif %}
             <br>
             <h1>{{user.username}}</h1>
-            <p>0 view</p>
-
+            
             <form method="post" enctype="multipart/form-data" id="profilePictureForm">
                 {% csrf_token %}
                 <div class="file btn btn-md btn-primary" style="position: relative;overflow: hidden;">
                     Select profile picture
                     <input type="file" name="profilePicture" accept="image/*" id="id_profilePicture"
-                        style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;">
+                    style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;">
                 </div>
             </form>
+            <p>Saved {{ savedNote|length }} Notes</p>
+            <p>Shared {{ myNote|length }} Notes</p>
+            <p>Total {{ saves }} Note saves</p>
         </div>
         <div class="col-md-5" style="padding-left: 2%;padding-top: 2%;">
             <div>
-                <h2>My Note</h2>
+                <h2>Shared Notes</h2>
                 {% include "noteCardTem.html" with noteObjList=myNote cardSize=6 %}
             </div>
         </div>
         <div class="col-md-5" style="padding-left: 2%;padding-top: 2%;">
             <div>
-                <h2>Saved Lecture</h2>
+                <h2>Saved Notes</h2>
+                {% include "noteCardTem.html" with noteObjList=savedNote cardSize=6 %}
                 
             </div>
         </div>

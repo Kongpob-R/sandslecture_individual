@@ -21,7 +21,7 @@ class Lecture(models.Model):
     subject = models.CharField(max_length=200,null=True)
     description = models.CharField(max_length=2000,null=True)
     author = models.ForeignKey(Profile, related_name='author',on_delete=models.CASCADE,blank=True,null=True)
-    userSaved = models.ForeignKey(Profile, related_name='userSaved',on_delete=models.CASCADE,blank=True,null=True)
+    userSaved = models.ManyToManyField(Profile)
     def __str__(self):
         return self.title
 

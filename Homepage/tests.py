@@ -123,5 +123,19 @@ class HomePageTest(TestCase):
         #self.assertContains( response, {"title" :""}, status_code=200 )
         self.assertEqual(response.content["title"],1)
         self.assertEqual(Lecture_img.objects.count(),1)'''
-
+    
+    def test_counting_saves(self):
+        creator = User.objects.create_user(username = 'tim',password = 'pass')
+        creatorProfile = Profile.objects.create(user = creator)
+        userA = User.objects.create_user(username = 'tim',password = 'pass')
+        userAProfile = Profile.objects.create(user = userA)
+        userB = User.objects.create_user(username = 'tim',password = 'pass')
+        userBProfile = Profile.objects.create(user = userB)
+        noteObj = Lecture.objects.create(title = 'test', description = 'test',author = creatorProfile)
+        noteObj.userSaved.add(userA)
+        noteObj.save()
+        self.assertEqual(Lecture.objects.userSaved.count(),1)
+        noteObj.userSaved.add(userB)
+        noteObj.save()
+        self.assertEqual(Lecture.objects.userSaved.count(),2)
        
