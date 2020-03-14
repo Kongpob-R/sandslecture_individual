@@ -29,7 +29,7 @@ class NewVisitorTest(LiveServerTestCase):
                     raise e  
                 time.sleep(0.5)
 
-    def test_Steve_uploading_a_lecture(self):
+    def test_Steve_uploading_a_note(self):
         # Steve's friends invite Steve visit their new lecture sharing site named Save&Share lecture
         # Steve's friends register an account for him and give him username and password of the site
         steveAccount = self.user
@@ -101,4 +101,35 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('navbar_logout', self.browser.page_source)
         self.browser.find_element_by_id('navbar_logout').send_keys(Keys.ENTER)
 
-        self.fail('Finish the test!')
+        # self.fail('Finish the test!')
+
+    def test_Linda_saving_a_note(self):
+        # Linda are willing to know about computer networking
+        # She prefer reading a note more than an entire book
+        # So, She go to Save&ShareLecture site which is a online note sharing platform
+        # She entering the site url in her browser
+        # She notice the homepage have popup
+        # She looking for a computer networking's note
+        # She use a search bar to make it quicker
+        # She found it!
+        # She click on the note to view the note's detail
+        # She have quick scrolling through all the note's contents and very enjoy it
+        # She decide to save this note onto her profile
+        # apparently, she have to login first. So, she follow the links
+        # She found herself in a login page. then she realize, she doesn't have an account
+        # She follow the link to register page
+        # She fillup the username and password and click register
+        # The site redirect to a login page
+        # She fillup the previous username and password and click login
+        # The site redirect to homepage
+        # She search for that note again and click on it
+        # this time the save button have appear instead of a link
+        # She click save note button
+        # She navigate to profile page
+        # The site redirect to profile page
+        # She found that note show up in saved note's column
+        # She realize she doesn't have a profile picture yet.
+        # Just for fancy, She click the button to upload a profile picture
+        # The page refreshes again and her profile picture showed up
+        # She logout
+
