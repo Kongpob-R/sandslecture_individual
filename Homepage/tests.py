@@ -10,7 +10,7 @@ from sandslecture.settings import BASE_DIR
 
 class HomePageTest(TestCase):
 
-    '''def test_adding_new_model_Profile(self):
+    def test_adding_new_model_Profile(self):
         password = 'newPassword'
         newUser = User.objects.create_superuser('newUser','newUser@email.com', password)
         newProfile = Profile()
@@ -100,7 +100,7 @@ class HomePageTest(TestCase):
         self.assertEqual(CountLec,1)
         self.assertEqual(Count_object,1)
         self.assertEqual(response.status_code,200)
-        #self.assertEqual(field_value, 1)'''
+        #self.assertEqual(field_value, 1)
 
     def test_upload_Lecture(self):
         c=Client()
@@ -112,7 +112,7 @@ class HomePageTest(TestCase):
         self.client.post('/upload/', {'submitbutton':'Submit','title':'tim','description':"555" ,'image':{SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read()),SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read())}} )
         self.assertEqual(Lecture.objects.count(),1)
         self.assertEqual(Lecture_img.objects.count(),2)
-    '''def test_button_upload_Clear(self):
+    def test_button_upload_Clear(self):
         c=Client()
         localtion=BASE_DIR
         Tim=User.objects.create_user(username='tim',password='pass')
@@ -122,7 +122,7 @@ class HomePageTest(TestCase):
         response = self.client.post('/upload/', {'Clearbutton':'Clear','title':'tim','description':"555" ,'image':SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read())} )
         #self.assertContains( response, {"title" :""}, status_code=200 )
         self.assertEqual(response.content["title"],1)
-        self.assertEqual(Lecture_img.objects.count(),1)'''
+        self.assertEqual(Lecture_img.objects.count(),1)
     
     def test_counting_saves(self):
         creator = User.objects.create_user(username = 'tim',password = 'pass')

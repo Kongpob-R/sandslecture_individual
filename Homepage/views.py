@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm , PasswordChangeForm
+from django.contrib.auth import logout, authenticate, login , update_session_auth_hash
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from .forms import *
@@ -8,12 +8,11 @@ from .models import Lecture,Profile,Lecture_img
 from django.forms import modelformset_factory
 from django.http import Http404
 from django.db.models import Count
-
+from django.contrib import messages
 class NoteWithThumbnail:
     def __init__(self, note, thumbnail):
         self.note = note
         self.thumbnail = thumbnail
-
 # Create your views here.
 def signup(request):
     if request.method == 'POST':
@@ -30,7 +29,6 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
-
 def home(request):
     noteWithThumbnail = []
     latestNote = []
@@ -80,13 +78,24 @@ def upload(request):
         else:
             LectureForm = LectureForms()
             Error=""
-
         return render(request, 'upload.html',{'LectureForm': LectureForm,"Error":Error})
-
     else:
         #Http404("Profile does not found")
         raise Http404("Profile does not found")
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST,user=request.user)
 
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request,form.user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(user=request.user) 
+    return render(request,'change_password.html',{'form':form})
 def lecture(request,lecture_id):
     if request.method == 'POST':
         profileObj = Profile.objects.get(user = request.user)

@@ -35,6 +35,9 @@
             <a class="nav-link" href="/profile/{{user.username}}" id="navbar_username">{{ user.username }}</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="change-password/" id="navbar_change-password">ChangePassword</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/accounts/logout" id="navbar_logout">Logout</a>
           </li>
         {% else %}
@@ -45,6 +48,7 @@
             <a class="nav-link" href="/accounts/login" id="navbar_login">Login</a>
           </li>
         {% endif %}
+        
       </ul>
       <form action="/" class="form-inline my-2 my-lg-0">
         <input name="word" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -52,6 +56,13 @@
       </form>
     </div>
   </nav>
+  {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
   {% block content %}
   {% endblock %}
   <!-- Optional JavaScript -->
