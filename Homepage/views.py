@@ -96,6 +96,10 @@ def change_password(request):
     else:
         form = PasswordChangeForm(user=request.user) 
     return render(request,'change_password.html',{'form':form})
+def about(request):
+    return render(request,'about.html')
+def help(request):
+    return render(request,'help.html')
 def lecture(request,lecture_id):
     if request.method == 'POST':
         profileObj = Profile.objects.get(user = request.user)
