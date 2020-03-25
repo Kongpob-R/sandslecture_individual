@@ -27,54 +27,63 @@
         <li class="nav-item active">
           <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
         </li>
-        {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="/upload" id="navbar_upload">Upload</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/profile/{{user.username}}" id="navbar_username">{{ user.username }}</a>
-          </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about" id="about">About</a>
+        </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="/about" id="about">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/help" id="help">Help</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/accounts/logout" id="navbar_logout">Logout</a>
-          </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="/upload" id="navbar_upload">Upload</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/profile/{{user.username}}" id="navbar_username">{{ user.username }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/accounts/logout" id="navbar_logout">Logout</a>
+        </li>
+
         {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="/accounts/login" id="navbar_upload">Upload</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/about" id="about">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/help" id="about">Help</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/accounts/login" id="navbar_login">Login</a>
-          </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/accounts/login" id="navbar_upload">Upload</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/accounts/login" id="navbar_login">Login</a>
+        </li>
         {% endif %}
-        
+
       </ul>
       <form action="/" class="form-inline my-2 my-lg-0">
         <input name="word" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button name="button_search" class="btn btn-outline-primary" type="submit">Search</button>
       </form>
+
+      <a class="nav-link" href="/help" id="help" text-align="navbar-right">
+        <svg class="bi bi-info-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
+            clip-rule="evenodd" />
+          <path
+            d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z" />
+          <circle cx="8" cy="4.5" r="1" />
+        </svg>
+      </a>
+
     </div>
   </nav>
+
+
   {% if messages %}
-          <ul class="messages">
-            {% for message in messages %}
-              <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
   {% block content %}
+
   {% endblock %}
+
+
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
