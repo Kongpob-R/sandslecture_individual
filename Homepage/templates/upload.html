@@ -14,7 +14,7 @@
 
                 <div class="col-md-offset-5 col-md-8 text-center">
                     <div class="input-group mb-3">
-                        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                        <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
                         <div class="container">
                             <fieldset class="form-group">
                                 <tr>
@@ -23,8 +23,9 @@
                                 </tr>
                             </fieldset>
                             <div class="preview-images-zone"></div>
+                            <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
                         </div>
-                        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+                        
                     </div>
                 </div>
 
@@ -92,7 +93,6 @@
 
                 picReader.readAsDataURL(file);
             }
-            $("#id_image").val('');
         } else {
             console.log('Browser not support');
         }
@@ -135,7 +135,7 @@
         width: 100%;
         height: 100%;
     }
-
+    
     .preview-images-zone>.preview-image>.image-cancel {
         font-size: 18px;
         position: absolute;
@@ -169,3 +169,4 @@
 
 
 {% endblock %}
+
