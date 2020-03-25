@@ -103,33 +103,95 @@ class NewVisitorTest(LiveServerTestCase):
 
         # self.fail('Finish the test!')
 
-    def test_Linda_saving_a_note(self):
-        # Linda are willing to know about computer networking
-        # She prefer reading a note more than an entire book
-        # So, She go to Save&ShareLecture site which is a online note sharing platform
-        # She entering the site url in her browser
-        # She notice the homepage have popup
-        # She looking for a computer networking's note
-        # She use a search bar to make it quicker
-        # She found it!
-        # She click on the note to view the note's detail
-        # She have quick scrolling through all the note's contents and very enjoy it
-        # She decide to save this note onto her profile
-        # apparently, she have to login first. So, she follow the links
-        # She found herself in a login page. then she realize, she doesn't have an account
-        # She follow the link to register page
-        # She fillup the username and password and click register
-        # The site redirect to a login page
-        # She fillup the previous username and password and click login
-        # The site redirect to homepage
-        # She search for that note again and click on it
-        # this time the save button have appear instead of a link
-        # She click save note button
-        # She navigate to profile page
-        # The site redirect to profile page
-        # She found that note show up in saved note's column
-        # She realize she doesn't have a profile picture yet.
-        # Just for fancy, She click the button to upload a profile picture
-        # The page refreshes again and her profile picture showed up
-        # She logout
+    def test_Linda_save_a_note(self):
+            self.test_Steve_uploading_a_note()
+            # Linda are willing to know about computer networking
+            # She prefer reading a note more than an entire book
+            # So, She go to Save&ShareLecture site which is a online note sharing platform
+            # She entering the site url in her browser
+            steve_logout=self.browser.find_elements_by_link_text('Logout')
+            steve_logout[0].send_keys(Keys.ENTER)
+            self.browser.get(self.live_server_url)
+            # She notice the homepage have popup
+            self.wait_for_page_to_render_text_in_id('','HomepageMainArea')
+            # She looking for a computer networking's note
+            # She use a search bar to make it quicker
+            search_textbox = self.browser.find_element_by_name('word')
+            search_textbox.send_keys('Network')
+            #ime.sleep(5)
+            search_button=self.browser.find_element_by_name('button_search')
+            search_button.send_keys(Keys.ENTER)
+            time.sleep(2)
+            # She found it!
+            self.wait_for_page_to_render_text_in_id('Networking fundamental','latestNote1')
+            # She click on the note to view the note's detail
+            Click_note=self.browser.find_element_by_link_text('Networking fundamental')
+            Click_note.send_keys(Keys.ENTER)
+            time.sleep(2)
+            # She have quick scrolling through all the note's contents and very enjoy it
+            # She decide to save this note onto her profile
+            # apparently, she have to login first. So, she follow the links
+            Link_login=self.browser.find_element_by_link_text('please login to save notes')
+            Link_login.click()
+            time.sleep(2)
+            # She found herself in a login page. then she realize, she doesn't have an account
+            self.wait_for_page_to_render_text_in_id('','login')
+            # She follow the link to register page
+            Link_SignUp=self.browser.find_element_by_link_text('Sign Up')
+            Link_SignUp.click()
+            time.sleep(2)
+            # She fillup the username and password and click register
+            username=self.browser.find_element_by_name('username')
+            username.send_keys('Linda')
+            password1=self.browser.find_element_by_name('password1')
+            password1.send_keys('Linda25422')
+            password2=self.browser.find_element_by_name('password2')
+            password2.send_keys('Linda25422')
+            self.browser.find_element_by_name('submit').send_keys(Keys.ENTER)
+            # The site redirect to a login page
+            self.wait_for_page_to_render_text_in_id('','login')
+            # She fillup the previous username and password and click login
+            username = self.browser.find_element_by_id('id_username')
+            username.send_keys('Linda')
+            password = self.browser.find_element_by_id('id_password')  
+            password.send_keys('Linda25422')    
+            password.send_keys(Keys.ENTER)
+            # The site redirect to homepage
+            self.wait_for_page_to_render_text_in_id('','HomepageMainArea')
+            # She search for that note again and click on it
+            search_textbox = self.browser.find_element_by_name('word')
+            search_textbox.send_keys('Network')
+            #ime.sleep(5)
+            search_button=self.browser.find_element_by_name('button_search')
+            search_button.send_keys(Keys.ENTER)
+            time.sleep(2)
+            # this time the save button have appear instead of a link
+            Click_note=self.browser.find_element_by_link_text('Networking fundamental')
+            Click_note.send_keys(Keys.ENTER)
+            time.sleep(2)
+            # She click save note button
+            Click_savenote=self.browser.find_element_by_name('noteID')
+            Click_savenote.send_keys(Keys.ENTER)
+            # She navigate to profile page
+            Click_Profile=self.browser.find_element_by_link_text('Linda')
+            Click_Profile.send_keys(Keys.ENTER)
+            time.sleep(2)
+            # The site redirect to profile page
+            # She found that note show up in saved note's column
+            self.wait_for_page_to_render_text_in_id('Networking fundamental','latestNote1')
+            
+            # She realize she doesn't have a profile picture yet.
+            # Just for fancy, She click the button to upload a profile picture
+            profile_pic = self.browser.find_element_by_name("profilePicture")
+            profile_pic.send_keys(os.path.abspath("red.png"))
+            time.sleep(2)
+            # The page refreshes again and her profile picture showed up
+            Class_img=self.browser.find_element_by_name('img_profile')
+            self.assertTrue(Class_img)
+            # She logout
+            self.browser.find_element_by_id('navbar_logout').send_keys(Keys.ENTER)
+            self.wait_for_page_to_render_text_in_id('','HomepageMainArea')
+
+    
+    
 
