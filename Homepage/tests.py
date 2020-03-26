@@ -12,7 +12,7 @@ class HomePageTest(TestCase):
 
     def test_adding_new_model_Profile(self):
         password = 'newPassword'
-        newUser = User.objects.create_superuser('newUser','newUser@email.com', password)
+        newUser = User.objects.create_user('newUser', password)
         newProfile = Profile()
         newProfile.user = newUser
         newProfile.save()
@@ -52,90 +52,65 @@ class HomePageTest(TestCase):
         self.assertEqual(firstLecture.id, 1)
         self.assertEqual(secondLecture.id, 2)
 
-    def test_upload_forms_Profile(self):
+    def test_upload_pic_Profile(self):
         c = Client()
         form=Profileform()
         localtion=BASE_DIR
-        response = c.post('/profile/<str:username>/', {'profilePicture':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
-        Count_object=Profile.objects.count()
-        obj = Profile.objects.all().last()
-        field_object = Profile._meta.get_field('profilePicture')
-        field_value = field_object.value_from_object(obj)
-        self.assertEqual(Count_object,'<ImageFieldFile: lecture_image/test_image_lec_SJw9IrQ.png>')
-        self.assertEqual(field_value, 1)
+        Tim=User.objects.create_user(username='Timmy',password='2542')
+        ProfileTim=Profile.objects.create(user=Tim)
+        response = c.post('/profile/'+str(ProfileTim)+'/', {'profilePicture':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
+        Count_object=Profile.objects.filter(id=1)[0].profilePicture 
 
-    def test_upload_Model_Profile(self):
-        
-        model=Profile()
-        localtion=BASE_DIR
-        model.profilePicture = SimpleUploadedFile(name='test_image_profile.png', content=open(localtion+"/red.png", 'rb').read(), content_type='image/png')
-        model.save()
-        obj = Profile.objects.all().last()
-        field_object = Profile._meta.get_field('profilePicture')
-        field_value = field_object.value_from_object(obj)
-        self.assertEqual(field_value,'<ImageFieldFile: images/test_image_profile.png>')
+        self.assertNotEquals(Count_object,"<ImageFieldFile: None>")
 
-    def test_upload_Model_Lecture(self):
-        model=Lecture()
-        localtion=BASE_DIR
-        model.image = SimpleUploadedFile(name='test_image_lec.png', content=open(localtion+"/red.png", 'rb').read(), content_type='image/png')
-        model.save()
-        obj = Lecture.objects.all().last()
-        field_object = Lecture._meta.get_field('image')
-        field_value = field_object.value_from_object(obj)
-        self.assertEqual(field_value,1)
 
-    def test_upload_forms_Lecture(self):
+
+
+
+    def test_submit_Lecture(self):
         c = Client()
         
         localtion=BASE_DIR
-        response = c.post('/upload/', {'username':'Timmy','password':"2542" } ) 
-        response = c.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
+        Tim=User.objects.create_user(username='Timmy',password='2542')
+        ProfileTim=Profile.objects.create(user=Tim)
+        self.client.post('/accounts/login/', {'username':'Timmy','password':"2542" } ) 
+        self.client.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
         CountLec=Lecture.objects.count()
         Count_object=Lecture_img.objects.count()
-        #obj = Profile.objects.all().last()
-        # field_object = Profile._meta.get_field('profilePicture')
-        #field_value = field_object.value_from_object(obj)
-       # self.assertTrue(Count_object.is_valid())
+
         self.assertEqual(CountLec,1)
         self.assertEqual(Count_object,1)
-        self.assertEqual(response.status_code,200)
-        #self.assertEqual(field_value, 1)
 
-    def test_upload_Lecture(self):
+
+    def test_upload_Muti_Pic_Lecture(self):
         c=Client()
         localtion=BASE_DIR
         Tim=User.objects.create_user(username='tim',password='pass')
         ProfileTim=Profile.objects.create(user=Tim)
-        #self.client.login(username='tim', password='pass')
+
         self.client.post('/accounts/login/', {'username':'tim','password':"pass" } ) 
         self.client.post('/upload/', {'submitbutton':'Submit','title':'tim','description':"555" ,'image':{SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read()),SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read())}} )
         self.assertEqual(Lecture.objects.count(),1)
         self.assertEqual(Lecture_img.objects.count(),2)
-    def test_button_upload_Clear(self):
-        c=Client()
-        localtion=BASE_DIR
-        Tim=User.objects.create_user(username='tim',password='pass')
-        ProfileTim=Profile.objects.create(user=Tim)
-        #self.client.login(username='tim', password='pass')
-        self.client.post('/accounts/login/', {'username':'tim','password':"pass" } ) 
-        response = self.client.post('/upload/', {'Clearbutton':'Clear','title':'tim','description':"555" ,'image':SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read())} )
-        #self.assertContains( response, {"title" :""}, status_code=200 )
-        self.assertEqual(response.content["title"],1)
-        self.assertEqual(Lecture_img.objects.count(),1)
+
     
     def test_counting_saves(self):
-        creator = User.objects.create_user(username = 'tim',password = 'pass')
+        creator = User.objects.create_user(username = 'tim01',password = 'pass')
+        userB = User.objects.create_user(username = 'tim21',password = 'pass')
+        userA = User.objects.create_user(username = 'tim11',password = 'pass')
         creatorProfile = Profile.objects.create(user = creator)
-        userA = User.objects.create_user(username = 'tim',password = 'pass')
+        
         userAProfile = Profile.objects.create(user = userA)
-        userB = User.objects.create_user(username = 'tim',password = 'pass')
+        
         userBProfile = Profile.objects.create(user = userB)
         noteObj = Lecture.objects.create(title = 'test', description = 'test',author = creatorProfile)
-        noteObj.userSaved.add(userA)
-        noteObj.save()
-        self.assertEqual(Lecture.objects.userSaved.count(),1)
-        noteObj.userSaved.add(userB)
-        noteObj.save()
-        self.assertEqual(Lecture.objects.userSaved.count(),2)
+        
+        useA=noteObj.userSaved.add(userAProfile)
+        
+        self.assertEqual(noteObj.userSaved.count(),1)
+        useB=noteObj.userSaved.add(userBProfile)
+        
+        self.assertEqual(noteObj.userSaved.count(),2)
+
+
        
