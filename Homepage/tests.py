@@ -7,6 +7,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from django.core.files import File
 from sandslecture.settings import BASE_DIR
+import os
+from pathlib import Path
+import glob
 
 class HomePageTest(TestCase):
 
@@ -94,7 +97,7 @@ class HomePageTest(TestCase):
         self.assertEqual(Lecture_img.objects.count(),2)
 
     
-    def test_counting_saves(self):
+    def test_saves_Lecture(self):
         creator = User.objects.create_user(username = 'tim01',password = 'pass')
         userB = User.objects.create_user(username = 'tim21',password = 'pass')
         userA = User.objects.create_user(username = 'tim11',password = 'pass')
@@ -108,9 +111,34 @@ class HomePageTest(TestCase):
         useA=noteObj.userSaved.add(userAProfile)
         
         self.assertEqual(noteObj.userSaved.count(),1)
+        self.assertIn(userAProfile,Lecture.objects.all()[0].userSaved.all())
         useB=noteObj.userSaved.add(userBProfile)
         
         self.assertEqual(noteObj.userSaved.count(),2)
+        self.assertIn(userBProfile,Lecture.objects.all()[0].userSaved.all())
+
+    def test_search_Lecture(self):
+        creator = User.objects.create_user(username = 'tim01',password = 'pass')
+        creatorProfile = Profile.objects.create(user = creator)
+        noteObj = Lecture.objects.create(title = 'test', description = 'test',author = creatorProfile)
+        noteObj_Img=Lecture_img.objects.create(LectureKey=noteObj,image=SimpleUploadedFile('666_1.png', content=open(BASE_DIR+'/red.png', 'rb').read()))
+        response = self.client.get('/',{'word':'test'})
+        y=response.content.decode()
+
+
+        self.assertIn('test',y)
+
+    def tearDown(self):
+        #location=BASE_DIR+'/sandslecture'+'/media'
+        #for i in 
+        #os.remove(location+'/images'+'/')
+        for i in glob.glob(BASE_DIR+'/sandslecture/media/*'):
+            i=Path(i)
+            for file in i.glob('666*.png'):
+                os.remove(file)
+
+        
+        
 
 
        
