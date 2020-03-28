@@ -125,8 +125,44 @@ class HomePageTest(TestCase):
         response = self.client.get('/',{'word':'test'})
         y=response.content.decode()
 
-
+        self.assertEqual(response.status_code,200)
         self.assertIn('test',y)
+    def test_change_password(self):
+        creator = User.objects.create_user(username = 'tim01',password = 'pass')
+        creatorProfile = Profile.objects.create(user = creator)
+        self.client.login(username = 'tim01',password = 'pass')
+        #self.client.post('/accounts/login/', {'username':'tim01','password':"pass" } ) 
+        self.client.post('/change-password/',{"old_password":'pass',"new_password1":"time25422542","new_password2":"time25422542"})
+        self.client.logout()
+        Login_test_new_pass=self.client.post('/accounts/login/', {'username':'tim01','password':"time25422542" },follow=True ) 
+        
+        self.assertEqual(Login_test_new_pass.status_code,200)
+        self.assertIn("tim01",Login_test_new_pass.content.decode())
+
+    
+    def test_Lecture_show_on_home(self):
+        localtion=BASE_DIR
+        Tim=User.objects.create_user(username='Timmy',password='2542')
+        ProfileTim=Profile.objects.create(user=Tim)
+        self.client.post('/accounts/login/', {'username':'Timmy','password':"2542" } ) 
+        upload=self.client.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
+
+        home=self.client.post('/').content.decode()
+
+        self.assertIn('666.png',home)
+        self.assertIn('tim',home)
+        #self.assertEqual(Count_object,1)
+
+    def test_Lecture_show_on_Profile(self):    
+        localtion=BASE_DIR
+        Tim=User.objects.create_user(username='Timmy',password='2542')
+        ProfileTim=Profile.objects.create(user=Tim)
+        self.client.post('/accounts/login/', {'username':'Timmy','password':"2542" } ) 
+        upload=self.client.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
+        Profile_page=Client().post('/profile/Timmy/',follow=True).content.decode()
+
+        self.assertIn('666.png',Profile_page)
+        self.assertIn('tim',Profile_page)
 
     def tearDown(self):
         #location=BASE_DIR+'/sandslecture'+'/media'
