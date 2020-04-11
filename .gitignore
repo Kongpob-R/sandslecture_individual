@@ -6,3 +6,4 @@ geckodriver.log
 virtualenv
 geckodriver.exe
 media
+.vscode

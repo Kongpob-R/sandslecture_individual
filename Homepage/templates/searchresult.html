@@ -12,11 +12,11 @@
                 <i class="fa fa-trophy"></i>
                 <h1>Search Result</h1>
                 <hr>
-                Found {{ noteWithThumbnail|length }} matches within titie or description
+                Found {{ matchNote|length }} matches within titie or description
                 <br>
             </div>
 
-            {% include "noteCardTem.html" with noteObjList=noteWithThumbnail only %}
+            {% include "noteCardTem.html" with noteObjList=matchNote only %}
         </div>
     </div>
 </div>

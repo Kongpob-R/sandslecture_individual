@@ -23,17 +23,14 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')), 
-    path('signup/', views.signup, name='signup'),
-    path('', views.home, name='home'), # new
-    path('change-password/', views.change_password, name='change_password'),
-    path('about/', views.about, name='about'),
-    path('help/', views.help, name='help'),
-    path('upload/',views.upload,name='upload'),
-    path('<int:lecture_id>/', views.lecture, name='lecture'),
-    path('profile/<str:username>/', views.profile, name='profile'),
-
-
-   # path("Profile/",views.profile555,name='profile555'),
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('signup/', views.signup, name = 'signup'),
+    path('', views.home, name = 'home'),
+    path('change-password/', views.changePassword, name = 'changePassword'),
+    path('about/', views.about, name = 'about'),
+    path('help/', views.help, name = 'help'),
+    path('upload/', views.upload, name = 'upload'),
+    path('<int:lecture_id>/', views.noteView, name = 'noteView'),
+    path('profile/<str:username>/', views.profile, name = 'profile'),
+]+static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
 
