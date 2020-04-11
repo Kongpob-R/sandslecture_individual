@@ -7,12 +7,12 @@ class Profileform(ModelForm):
         model = Profile
         fields = ['profilePicture']
 
-class LectureForms(ModelForm):
+class NoteForms(ModelForm):
    class Meta:
-      model = Lecture
+      model = Note
       fields = ['title','description']
 
-class Lecture_imgForms(ModelForm):
+class NoteImageForms(ModelForm):
       class Meta:
-         model = Lecture_img
+         model = NoteImage
          fields = ['image']

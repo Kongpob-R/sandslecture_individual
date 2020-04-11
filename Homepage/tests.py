@@ -22,38 +22,38 @@ class HomePageTest(TestCase):
         self.assertEqual('newUser',newProfile.user.username)
         
     def test_saving_and_retrieving_lecture_title(self):
-        firstLecture = Lecture()
-        firstLecture.title = 'The first (ever) lecture title'
-        firstLecture.save()
+        firstNote = Note()
+        firstNote.title = 'The first (ever) lecture title'
+        firstNote.save()
 
-        secondLecture = Lecture()
-        secondLecture.title = 'lecture title the second'
-        secondLecture.save()
+        secondNote = Note()
+        secondNote.title = 'lecture title the second'
+        secondNote.save()
 
-        lectures = Lecture.objects.all()
+        lectures = Note.objects.all()
         self.assertEqual(lectures.count(), 2)
 
-        firstLecture = lectures[0]
-        secondLecture = lectures[1]
-        self.assertEqual(firstLecture.title, 'The first (ever) lecture title')
-        self.assertEqual(secondLecture.title, 'lecture title the second')
+        firstNote = lectures[0]
+        secondNote = lectures[1]
+        self.assertEqual(firstNote.title, 'The first (ever) lecture title')
+        self.assertEqual(secondNote.title, 'lecture title the second')
 
     def test_saving_lecture_id_auto_increment_start_at_1(self):
-        firstLecture = Lecture()
-        firstLecture.title = 'The first (ever) lecture title'
-        firstLecture.save()
+        firstNote = Note()
+        firstNote.title = 'The first (ever) lecture title'
+        firstNote.save()
 
-        secondLecture = Lecture()
-        secondLecture.title = 'lecture title the second'
-        secondLecture.save()
+        secondNote = Note()
+        secondNote.title = 'lecture title the second'
+        secondNote.save()
 
-        lectures = Lecture.objects.all()
+        lectures = Note.objects.all()
         self.assertEqual(lectures.count(), 2)
 
-        firstLecture = lectures[0]
-        secondLecture = lectures[1]
-        self.assertEqual(firstLecture.id, 1)
-        self.assertEqual(secondLecture.id, 2)
+        firstNote = lectures[0]
+        secondNote = lectures[1]
+        self.assertEqual(firstNote.id, 1)
+        self.assertEqual(secondNote.id, 2)
 
     def test_upload_pic_Profile(self):
         c = Client()
@@ -70,7 +70,7 @@ class HomePageTest(TestCase):
 
 
 
-    def test_submit_Lecture(self):
+    def test_submit_Note(self):
         c = Client()
         
         localtion=BASE_DIR
@@ -78,14 +78,14 @@ class HomePageTest(TestCase):
         ProfileTim=Profile.objects.create(user=Tim)
         self.client.post('/accounts/login/', {'username':'Timmy','password':"2542" } ) 
         self.client.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
-        CountLec=Lecture.objects.count()
-        Count_object=Lecture_img.objects.count()
+        CountLec=Note.objects.count()
+        Count_object=NoteImage.objects.count()
 
         self.assertEqual(CountLec,1)
         self.assertEqual(Count_object,1)
 
 
-    def test_upload_Muti_Pic_Lecture(self):
+    def test_upload_Muti_Pic_Note(self):
         c=Client()
         localtion=BASE_DIR
         Tim=User.objects.create_user(username='tim',password='pass')
@@ -93,11 +93,11 @@ class HomePageTest(TestCase):
 
         self.client.post('/accounts/login/', {'username':'tim','password':"pass" } ) 
         self.client.post('/upload/', {'submitbutton':'Submit','title':'tim','description':"555" ,'image':{SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read()),SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read())}} )
-        self.assertEqual(Lecture.objects.count(),1)
-        self.assertEqual(Lecture_img.objects.count(),2)
+        self.assertEqual(Note.objects.count(),1)
+        self.assertEqual(NoteImage.objects.count(),2)
 
     
-    def test_saves_Lecture(self):
+    def test_saves_Note(self):
         creator = User.objects.create_user(username = 'tim01',password = 'pass')
         userB = User.objects.create_user(username = 'tim21',password = 'pass')
         userA = User.objects.create_user(username = 'tim11',password = 'pass')
@@ -106,22 +106,22 @@ class HomePageTest(TestCase):
         userAProfile = Profile.objects.create(user = userA)
         
         userBProfile = Profile.objects.create(user = userB)
-        noteObj = Lecture.objects.create(title = 'test', description = 'test',author = creatorProfile)
+        noteObj = Note.objects.create(title = 'test', description = 'test',author = creatorProfile)
         
         useA=noteObj.userSaved.add(userAProfile)
         
         self.assertEqual(noteObj.userSaved.count(),1)
-        self.assertIn(userAProfile,Lecture.objects.all()[0].userSaved.all())
+        self.assertIn(userAProfile,Note.objects.all()[0].userSaved.all())
         useB=noteObj.userSaved.add(userBProfile)
         
         self.assertEqual(noteObj.userSaved.count(),2)
-        self.assertIn(userBProfile,Lecture.objects.all()[0].userSaved.all())
+        self.assertIn(userBProfile,Note.objects.all()[0].userSaved.all())
 
-    def test_search_Lecture(self):
+    def test_search_Note(self):
         creator = User.objects.create_user(username = 'tim01',password = 'pass')
         creatorProfile = Profile.objects.create(user = creator)
-        noteObj = Lecture.objects.create(title = 'test', description = 'test',author = creatorProfile)
-        noteObj_Img=Lecture_img.objects.create(LectureKey=noteObj,image=SimpleUploadedFile('666_1.png', content=open(BASE_DIR+'/red.png', 'rb').read()))
+        noteObj = Note.objects.create(title = 'test', description = 'test',author = creatorProfile)
+        noteObj_Img=NoteImage.objects.create(NoteKey=noteObj,image=SimpleUploadedFile('666_1.png', content=open(BASE_DIR+'/red.png', 'rb').read()))
         response = self.client.get('/',{'word':'test'})
         y=response.content.decode()
 
@@ -140,7 +140,7 @@ class HomePageTest(TestCase):
         self.assertIn("tim01",Login_test_new_pass.content.decode())
 
     
-    def test_Lecture_show_on_home(self):
+    def test_Note_show_on_home(self):
         localtion=BASE_DIR
         Tim=User.objects.create_user(username='Timmy',password='2542')
         ProfileTim=Profile.objects.create(user=Tim)
@@ -153,7 +153,7 @@ class HomePageTest(TestCase):
         self.assertIn('tim',home)
         #self.assertEqual(Count_object,1)
 
-    def test_Lecture_show_on_Profile(self):    
+    def test_Note_show_on_Profile(self):    
         localtion=BASE_DIR
         Tim=User.objects.create_user(username='Timmy',password='2542')
         ProfileTim=Profile.objects.create(user=Tim)
