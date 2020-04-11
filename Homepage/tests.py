@@ -21,7 +21,7 @@ class HomePageTest(TestCase):
         newProfile.save()
         self.assertEqual('newUser',newProfile.user.username)
         
-    def test_saving_and_retrieving_lecture_title(self):
+    def test_saving_and_retrieving_note_title(self):
         firstNote = Note()
         firstNote.title = 'The first (ever) lecture title'
         firstNote.save()
@@ -30,15 +30,15 @@ class HomePageTest(TestCase):
         secondNote.title = 'lecture title the second'
         secondNote.save()
 
-        lectures = Note.objects.all()
-        self.assertEqual(lectures.count(), 2)
+        notes = Note.objects.all()
+        self.assertEqual(notes.count(), 2)
 
-        firstNote = lectures[0]
-        secondNote = lectures[1]
+        firstNote = notes[0]
+        secondNote = notes[1]
         self.assertEqual(firstNote.title, 'The first (ever) lecture title')
         self.assertEqual(secondNote.title, 'lecture title the second')
 
-    def test_saving_lecture_id_auto_increment_start_at_1(self):
+    def test_saving_note_id_auto_increment_starting_at_1(self):
         firstNote = Note()
         firstNote.title = 'The first (ever) lecture title'
         firstNote.save()
@@ -47,130 +47,125 @@ class HomePageTest(TestCase):
         secondNote.title = 'lecture title the second'
         secondNote.save()
 
-        lectures = Note.objects.all()
-        self.assertEqual(lectures.count(), 2)
+        notes = Note.objects.all()
+        self.assertEqual(notes.count(), 2)
 
-        firstNote = lectures[0]
-        secondNote = lectures[1]
+        firstNote = notes[0]
+        secondNote = notes[1]
         self.assertEqual(firstNote.id, 1)
         self.assertEqual(secondNote.id, 2)
 
-    def test_upload_pic_Profile(self):
-        c = Client()
-        form=Profileform()
-        localtion=BASE_DIR
-        Tim=User.objects.create_user(username='Timmy',password='2542')
-        ProfileTim=Profile.objects.create(user=Tim)
-        response = c.post('/profile/'+str(ProfileTim)+'/', {'profilePicture':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
-        Count_object=Profile.objects.filter(id=1)[0].profilePicture 
-
-        self.assertNotEquals(Count_object,"<ImageFieldFile: None>")
-
-
-
-
-
-    def test_submit_Note(self):
-        c = Client()
+    def test_uploading_Profile_picture(self):
+        client = Client()
+        form = Profileform()
+        localtion = BASE_DIR
+        Tim = User.objects.create_user(username = 'Timmy', password = '2542')
+        TimProfileObject = Profile.objects.create(user = Tim)
+        response = client.post('/profile/'+ str(TimProfileObject) +'/', {'profilePicture': SimpleUploadedFile('666.png', content = open(localtion+'/red.png', 'rb').read())} ) 
         
-        localtion=BASE_DIR
-        Tim=User.objects.create_user(username='Timmy',password='2542')
-        ProfileTim=Profile.objects.create(user=Tim)
-        self.client.post('/accounts/login/', {'username':'Timmy','password':"2542" } ) 
-        self.client.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
-        CountLec=Note.objects.count()
-        Count_object=NoteImage.objects.count()
+        profileObject = Profile.objects.filter(id = 1)[0]
+        self.assertNotEquals(profileObject.profilePicture, "<ImageFieldFile: None>")
 
-        self.assertEqual(CountLec,1)
-        self.assertEqual(Count_object,1)
+    def test_uploading_Note_with_single_image(self):
+        client = Client()
+        localtion = BASE_DIR
+        Tim = User.objects.create_user(username = 'Timmy', password='2542')
+        TimProfileObject = Profile.objects.create(user = Tim)
+        self.client.post('/accounts/login/', {'username': 'Timmy', 'password': "2542"}) 
+        self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
+        
+        totalNoteCount = Note.objects.count()
+        totalUploadedImages = NoteImage.objects.count()
+        self.assertEqual(totalNoteCount, 1)
+        self.assertEqual(totalUploadedImages, 1)
 
+    def test_upload_Note_with_multiple_images(self):
+        client = Client()
+        localtion = BASE_DIR
+        Tim = User.objects.create_user(username = 'tim', password = 'pass')
+        TimProfileObject = Profile.objects.create(user = Tim)
+        self.client.post('/accounts/login/', {'username': 'tim', 'password': "pass" } ) 
+        self.client.post('/upload/', {'submitbutton': 'Submit', 'title': 'tim', 'description': "555" , 
+        'image': {
+        SimpleUploadedFile('666_1.png', content = open(localtion + '/red.png', 'rb').read()), 
+        SimpleUploadedFile('666_1.png', content = open(localtion + '/red.png', 'rb').read())
+        }})
 
-    def test_upload_Muti_Pic_Note(self):
-        c=Client()
-        localtion=BASE_DIR
-        Tim=User.objects.create_user(username='tim',password='pass')
-        ProfileTim=Profile.objects.create(user=Tim)
-
-        self.client.post('/accounts/login/', {'username':'tim','password':"pass" } ) 
-        self.client.post('/upload/', {'submitbutton':'Submit','title':'tim','description':"555" ,'image':{SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read()),SimpleUploadedFile('666_1.png', content=open(localtion+'/red.png', 'rb').read())}} )
-        self.assertEqual(Note.objects.count(),1)
-        self.assertEqual(NoteImage.objects.count(),2)
+        totalNoteCount = Note.objects.count()
+        totalUploadedImages = NoteImage.objects.count()
+        self.assertEqual(totalNoteCount, 1)
+        self.assertEqual(totalUploadedImages, 2)
 
     
-    def test_saves_Note(self):
+    def test_A_note_getting_save_by_multiple_users(self):
         creator = User.objects.create_user(username = 'tim01',password = 'pass')
-        userB = User.objects.create_user(username = 'tim21',password = 'pass')
         userA = User.objects.create_user(username = 'tim11',password = 'pass')
-        creatorProfile = Profile.objects.create(user = creator)
+        userB = User.objects.create_user(username = 'tim21',password = 'pass')
+
+        creatorProfileObject = Profile.objects.create(user = creator)
+        userAProfileObject = Profile.objects.create(user = userA)
+        userBProfileObject = Profile.objects.create(user = userB)
+
+        testCreatedNote = Note.objects.create(title = 'test', description = 'test', author = creatorProfileObject)
         
-        userAProfile = Profile.objects.create(user = userA)
+        testCreatedNote.userSaved.add(userAProfileObject)
         
-        userBProfile = Profile.objects.create(user = userB)
-        noteObj = Note.objects.create(title = 'test', description = 'test',author = creatorProfile)
+        self.assertEqual(testCreatedNote.userSaved.count(), 1)
+        self.assertIn(userAProfileObject, testCreatedNote.userSaved.all())
+
+        testCreatedNote.userSaved.add(userBProfileObject)
         
-        useA=noteObj.userSaved.add(userAProfile)
-        
-        self.assertEqual(noteObj.userSaved.count(),1)
-        self.assertIn(userAProfile,Note.objects.all()[0].userSaved.all())
-        useB=noteObj.userSaved.add(userBProfile)
-        
-        self.assertEqual(noteObj.userSaved.count(),2)
-        self.assertIn(userBProfile,Note.objects.all()[0].userSaved.all())
+        self.assertEqual(testCreatedNote.userSaved.count(), 2)
+        self.assertIn(userBProfileObject, testCreatedNote.userSaved.all())
 
     def test_search_Note(self):
-        creator = User.objects.create_user(username = 'tim01',password = 'pass')
-        creatorProfile = Profile.objects.create(user = creator)
-        noteObj = Note.objects.create(title = 'test', description = 'test',author = creatorProfile)
-        noteObj_Img=NoteImage.objects.create(NoteKey=noteObj,image=SimpleUploadedFile('666_1.png', content=open(BASE_DIR+'/red.png', 'rb').read()))
-        response = self.client.get('/',{'word':'test'})
-        y=response.content.decode()
+        creator = User.objects.create_user(username = 'tim01', password = 'pass')
+        creatorProfileObject = Profile.objects.create(user = creator)
+        testCreatedNote = Note.objects.create(title = 'test', description = 'test', author = creatorProfileObject)
+        testCreatedNoteImage = NoteImage.objects.create(noteKey = testCreatedNote, image = SimpleUploadedFile('666_1.png', content = open(BASE_DIR + '/red.png', 'rb').read()))
 
+        response = self.client.get('/', {'word': 'test'})
         self.assertEqual(response.status_code,200)
-        self.assertIn('test',y)
+        decodedResponse = response.content.decode()
+        self.assertIn('test', decodedResponse)
+
     def test_change_password(self):
-        creator = User.objects.create_user(username = 'tim01',password = 'pass')
-        creatorProfile = Profile.objects.create(user = creator)
-        self.client.login(username = 'tim01',password = 'pass')
-        #self.client.post('/accounts/login/', {'username':'tim01','password':"pass" } ) 
-        self.client.post('/change-password/',{"old_password":'pass',"new_password1":"time25422542","new_password2":"time25422542"})
+        creator = User.objects.create_user(username = 'tim01', password = 'pass')
+        creatorProfileObject = Profile.objects.create(user = creator)
+        self.client.login(username = 'tim01', password = 'pass')
+        self.client.post('/change-password/', {"old_password": 'pass', "new_password1": "time25422542", "new_password2": "time25422542"})
         self.client.logout()
-        Login_test_new_pass=self.client.post('/accounts/login/', {'username':'tim01','password':"time25422542" },follow=True ) 
+        newPasswordLoginResponse = self.client.post('/accounts/login/', {'username': 'tim01', 'password': "time25422542" }, follow = True) 
         
-        self.assertEqual(Login_test_new_pass.status_code,200)
-        self.assertIn("tim01",Login_test_new_pass.content.decode())
+        self.assertEqual(newPasswordLoginResponse.status_code, 200)
+        self.assertIn("tim01", newPasswordLoginResponse.content.decode())
 
-    
-    def test_Note_show_on_home(self):
-        localtion=BASE_DIR
-        Tim=User.objects.create_user(username='Timmy',password='2542')
-        ProfileTim=Profile.objects.create(user=Tim)
-        self.client.post('/accounts/login/', {'username':'Timmy','password':"2542" } ) 
-        upload=self.client.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
+    def test_Note_show_up_on_homepage(self):
+        localtion = BASE_DIR
+        Tim = User.objects.create_user(username = 'Timmy', password = '2542')
+        TimProfileObject = Profile.objects.create(user = Tim)
+        self.client.post('/accounts/login/', {'username': 'Timmy', 'password': "2542"}) 
+        self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content = open(localtion + '/red.png', 'rb').read())}) 
 
-        home=self.client.post('/').content.decode()
-
-        self.assertIn('666.png',home)
-        self.assertIn('tim',home)
-        #self.assertEqual(Count_object,1)
+        decodedHomepageResponse = self.client.get('/').content.decode()
+        self.assertIn('666.png', decodedHomepageResponse)
+        self.assertIn('tim', decodedHomepageResponse)
 
     def test_Note_show_on_Profile(self):    
-        localtion=BASE_DIR
-        Tim=User.objects.create_user(username='Timmy',password='2542')
-        ProfileTim=Profile.objects.create(user=Tim)
-        self.client.post('/accounts/login/', {'username':'Timmy','password':"2542" } ) 
-        upload=self.client.post('/upload/', {'title':'tim','description':"555" ,'image':SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
-        Profile_page=Client().post('/profile/Timmy/',follow=True).content.decode()
+        localtion = BASE_DIR
+        Tim = User.objects.create_user(username = 'Timmy', password = '2542')
+        TimProfileObject = Profile.objects.create(user = Tim)
+        self.client.post('/accounts/login/', {'username': 'Timmy', 'password': "2542"}) 
+        self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content = open(localtion + '/red.png', 'rb').read())}) 
 
-        self.assertIn('666.png',Profile_page)
-        self.assertIn('tim',Profile_page)
+        decodedProfilePageResponse = Client().post('/profile/Timmy/', follow = True).content.decode()
+        self.assertIn('666.png', decodedProfilePageResponse)
+        self.assertIn('tim', decodedProfilePageResponse)
 
     def tearDown(self):
-        #location=BASE_DIR+'/sandslecture'+'/media'
-        #for i in 
-        #os.remove(location+'/images'+'/')
-        for i in glob.glob(BASE_DIR+'/sandslecture/media/*'):
-            i=Path(i)
-            for file in i.glob('666*.png'):
+        for directory in glob.glob(BASE_DIR+'/sandslecture/media/*'):
+            directory = Path(directory)
+            for file in directory.glob('666*.png'):
                 os.remove(file)
 
         
