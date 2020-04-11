@@ -58,21 +58,21 @@ class HomePageTest(TestCase):
     def test_uploading_Profile_picture(self):
         client = Client()
         form = Profileform()
-        localtion = BASE_DIR
+        location = BASE_DIR
         Tim = User.objects.create_user(username = 'Timmy', password = '2542')
         TimProfileObject = Profile.objects.create(user = Tim)
-        response = client.post('/profile/'+ str(TimProfileObject) +'/', {'profilePicture': SimpleUploadedFile('666.png', content = open(localtion+'/red.png', 'rb').read())} ) 
+        response = client.post('/profile/'+ str(TimProfileObject) +'/', {'profilePicture': SimpleUploadedFile('666.png', content = open(location+'/red.png', 'rb').read())} ) 
         
         profileObject = Profile.objects.filter(id = 1)[0]
         self.assertNotEquals(profileObject.profilePicture, "<ImageFieldFile: None>")
 
     def test_uploading_Note_with_single_image(self):
         client = Client()
-        localtion = BASE_DIR
+        location = BASE_DIR
         Tim = User.objects.create_user(username = 'Timmy', password='2542')
         TimProfileObject = Profile.objects.create(user = Tim)
         self.client.post('/accounts/login/', {'username': 'Timmy', 'password': "2542"}) 
-        self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content=open(localtion+'/red.png', 'rb').read())} ) 
+        self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content=open(location+'/red.png', 'rb').read())} ) 
         
         totalNoteCount = Note.objects.count()
         totalUploadedImages = NoteImage.objects.count()
@@ -81,14 +81,14 @@ class HomePageTest(TestCase):
 
     def test_upload_Note_with_multiple_images(self):
         client = Client()
-        localtion = BASE_DIR
+        location = BASE_DIR
         Tim = User.objects.create_user(username = 'tim', password = 'pass')
         TimProfileObject = Profile.objects.create(user = Tim)
         self.client.post('/accounts/login/', {'username': 'tim', 'password': "pass" } ) 
         self.client.post('/upload/', {'submitbutton': 'Submit', 'title': 'tim', 'description': "555" , 
         'image': {
-        SimpleUploadedFile('666_1.png', content = open(localtion + '/red.png', 'rb').read()), 
-        SimpleUploadedFile('666_1.png', content = open(localtion + '/red.png', 'rb').read())
+        SimpleUploadedFile('666_1.png', content = open(location + '/red.png', 'rb').read()), 
+        SimpleUploadedFile('666_1.png', content = open(location + '/red.png', 'rb').read())
         }})
 
         totalNoteCount = Note.objects.count()
@@ -135,28 +135,28 @@ class HomePageTest(TestCase):
         self.client.login(username = 'tim01', password = 'pass')
         self.client.post('/change-password/', {"old_password": 'pass', "new_password1": "time25422542", "new_password2": "time25422542"})
         self.client.logout()
-        newPasswordLoginResponse = self.client.post('/accounts/login/', {'username': 'tim01', 'password': "time25422542" }, follow = True) 
         
+        newPasswordLoginResponse = self.client.post('/accounts/login/', {'username': 'tim01', 'password': "time25422542" }, follow = True) 
         self.assertEqual(newPasswordLoginResponse.status_code, 200)
         self.assertIn("tim01", newPasswordLoginResponse.content.decode())
 
     def test_Note_show_up_on_homepage(self):
-        localtion = BASE_DIR
+        location = BASE_DIR
         Tim = User.objects.create_user(username = 'Timmy', password = '2542')
         TimProfileObject = Profile.objects.create(user = Tim)
         self.client.post('/accounts/login/', {'username': 'Timmy', 'password': "2542"}) 
-        self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content = open(localtion + '/red.png', 'rb').read())}) 
+        self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content = open(location + '/red.png', 'rb').read())}) 
 
         decodedHomepageResponse = self.client.get('/').content.decode()
         self.assertIn('666.png', decodedHomepageResponse)
         self.assertIn('tim', decodedHomepageResponse)
 
     def test_Note_show_on_Profile(self):    
-        localtion = BASE_DIR
+        location = BASE_DIR
         Tim = User.objects.create_user(username = 'Timmy', password = '2542')
         TimProfileObject = Profile.objects.create(user = Tim)
         self.client.post('/accounts/login/', {'username': 'Timmy', 'password': "2542"}) 
-        self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content = open(localtion + '/red.png', 'rb').read())}) 
+        self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content = open(location + '/red.png', 'rb').read())}) 
 
         decodedProfilePageResponse = Client().post('/profile/Timmy/', follow = True).content.decode()
         self.assertIn('666.png', decodedProfilePageResponse)
