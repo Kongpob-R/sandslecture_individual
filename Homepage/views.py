@@ -17,6 +17,10 @@ class NoteWithThumbnail:
 
 # Create your views here.
 def signup(request):
+    # inheritance user authentication from build-in django.auth
+    # when user is signing up with UserCreationForm a User object will be created
+    # this method will create Profile object with one-to-one relationship to that User object
+    # So, that we can store more information in Profile object than User object, such as profile picture
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         print(form.is_valid())
@@ -33,6 +37,8 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 def home(request):
+    # fetching out the note with match keyword in title or description and return with rearchresult.html
+    # else if no keyword were given it will fetch out latestNote and popularNote
     matchNote = []
     latestNote = []
     popularNote = []
@@ -52,6 +58,8 @@ def home(request):
         return render(request, 'home.html',{'latestNote': latestNote, 'popularNote': popularNote})
 
 def upload(request):
+    # handler for an upload content, create Note object for given title, description and author
+    # create NoteImage object for each images in the content
     if Profile.objects.filter(user=request.user):
         profileObject = Profile.objects.get(user=request.user)
         if request.method == 'POST':
@@ -79,6 +87,8 @@ def upload(request):
         raise Http404("Profile does not found")
 
 def changePassword(request):
+    # handle the password changing
+    # username and password are in User object from django.auth and django are provide a method to edit it already.
     if request.method == 'POST':
         form = PasswordChangeForm(data=request.POST, user=request.user)
 
@@ -99,7 +109,8 @@ def about(request):
 def help(request):
     return render(request, 'help.html')
 
-def noteView(request, lecture_id):
+def noteView(request, noteID):
+    # handle the request noteID and fetch the Note object with that ID and also all the NoteImage object related to that Note object
     if request.method == 'POST':
         profileObject = Profile.objects.get(user = request.user)
         noteObject = Note.objects.get(id = int(request.POST.get('noteID')))
@@ -108,11 +119,14 @@ def noteView(request, lecture_id):
             noteObject.save()
         return HttpResponseRedirect("/" + request.POST.get('noteID'))
     else:
-        noteObject = Note.objects.get(id = lecture_id)
+        noteObject = Note.objects.get(id = noteID)
         imageObjectList = noteObject.NoteImage.all()
         return render(request, 'notedetail.html', {'noteObject': noteObject, "imageObjectList": imageObjectList})
 
 def profile(request, username):
+    # handle the request of user when a profile picture was uploaded and update Profile object with that picture
+    # else if user wasn't decide to upload this method will return infomation about that Profile object and Note and NoteImage objects related
+    # with that Profile object
     userObject = User.objects.get(username = username)
     profileObject = Profile.objects.get(user = userObject)
     if request.method == 'POST':
