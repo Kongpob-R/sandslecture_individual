@@ -178,12 +178,16 @@ class HomePageTest(TestCase):
         self.assertIn("tim01", newPasswordLoginResponse.content.decode())
 
     def test_Note_show_up_on_homepage(self):
+        # create a User object and Profile object
         location = BASE_DIR
         Tim = User.objects.create_user(username = 'Timmy', password = '2542')
         TimProfileObject = Profile.objects.create(user = Tim)
+
+        # post request to login and create new Note object with one image
         self.client.post('/accounts/login/', {'username': 'Timmy', 'password': "2542"}) 
         self.client.post('/upload/', {'title': 'tim', 'description': "555", 'image': SimpleUploadedFile('666.png', content = open(location + '/red.png', 'rb').read())}) 
 
+        # post request to login and create new Note object with one image
         decodedHomepageResponse = self.client.get('/').content.decode()
         self.assertIn('666.png', decodedHomepageResponse)
         self.assertIn('tim', decodedHomepageResponse)
