@@ -23,7 +23,6 @@ def signup(request):
     # So, that we can store more information in Profile object than User object, such as profile picture
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
-        print(form.is_valid())
         if form.is_valid():
             newUser = form.save()
             Profile.objects.create(user = newUser)
@@ -111,6 +110,8 @@ def help(request):
 
 def noteView(request, noteID):
     # handle the request noteID and fetch the Note object with that ID and also all the NoteImage object related to that Note object
+    # it also show up a save button(only if user arn't the note's author or user havn't save the note yet)
+    # when user click 'save' that user's Profile object will be add to many-to-many of that note's userSaved
     if request.method == 'POST':
         profileObject = Profile.objects.get(user = request.user)
         noteObject = Note.objects.get(id = int(request.POST.get('noteID')))
