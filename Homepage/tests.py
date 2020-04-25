@@ -207,6 +207,24 @@ class HomePageTest(TestCase):
         self.assertIn('666.png', decodedProfilePageResponse)
         self.assertIn('tim', decodedProfilePageResponse)
 
+    def test_noteSaved_count_decresing_when_note_get_delete(self):
+        # create 2 User object and Profile object
+        userA = User.objects.create_user(username = 'userA', password = 'userApassword')
+        userAProfileObject = Profile.objects.create(user = userA)
+        userB = User.objects.create_user(username = 'userB', password = 'userBpassword')
+        userBProfileObject = Profile.objects.create(user = userB)
+
+        # create 1 Note object with userA as an author and let userB save this note
+        testCreatedNote = Note.objects.create(title = 'test', description = 'test', author = userAProfileObject)
+        testCreatedNote.userSaved.add(userBProfileObject)
+
+        # test userB's noteSaved count
+        self.assertEqual(userBProfileObject.noteSaved.count(), 1)
+
+        # delete the note and test userB's noteSaved count
+        testCreatedNote.delete()
+        self.assertEqual(userBProfileObject.noteSaved.count(), 0)
+
     def tearDown(self):
         # clear the Images directory after finish all the test
         for directory in glob.glob(BASE_DIR+'/sandslecture/media/*'):
