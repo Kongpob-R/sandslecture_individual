@@ -225,6 +225,22 @@ class HomePageTest(TestCase):
         testCreatedNote.delete()
         self.assertEqual(userBProfileObject.noteSaved.count(), 0)
 
+    def test_deleting_note_via_post_request(self):
+        # create userA's User object and Profile object
+        # then, create a Note object with userA as an author
+        username = 'userA'
+        password = 'userApassword'
+        userA = User.objects.create_user(username = username, password = password)
+        userAProfileObject = Profile.objects.create(user = userA)
+        testCreatedNote = Note.objects.create(title = 'test', description = 'test', author = userAProfileObject)
+
+        # make a post request to login and delete the note
+        self.client.post('/accounts/login/', {'username': username, 'password': password } ) 
+        response = self.client.post('/' + str(testCreatedNote.id) + '/', {'noteID': str(testCreatedNote.id) })
+
+        # test note was deleted
+        self.assertEqual(Note.objects.count(), 0)
+
     def tearDown(self):
         # clear the Images directory after finish all the test
         for directory in glob.glob(BASE_DIR+'/sandslecture/media/*'):
