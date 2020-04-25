@@ -110,12 +110,19 @@ def help(request):
 
 def noteView(request, noteID):
     # handle the request noteID and fetch the Note object with that ID and also all the NoteImage object related to that Note object
-    # it also show up a save button(only if user arn't the note's author or user havn't save the note yet)
+    # it also show up a button names as following
+    # save button: if user isn't an author of this note
+    # delete button: if user is an author of this note
+    # link-text to login page: if user is not login
+
     # when user click 'save' that user's Profile object will be add to many-to-many of that note's userSaved
     if request.method == 'POST':
         profileObject = Profile.objects.get(user = request.user)
         noteObject = Note.objects.get(id = int(request.POST.get('noteID')))
-        if profileObject not in noteObject.userSaved.all():
+        if profileObject == noteObject.author:
+            noteObject.delete()
+            return HttpResponseRedirect("/")
+        elif profileObject not in noteObject.userSaved.all():
             noteObject.userSaved.add(profileObject)
             noteObject.save()
         return HttpResponseRedirect("/" + request.POST.get('noteID'))
