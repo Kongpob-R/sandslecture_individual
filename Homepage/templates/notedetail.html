@@ -37,14 +37,17 @@
                         {{ noteObject.description }}</span></h5>
                 <br>
 
+                <!-- Logic of what kind of button will show up, depend on login state -->
                 {% if user.is_authenticated %}
                 {% if user.username != noteObject.author.user.username %}
+                <!-- Save button: if user are NOT the note author -->
                 <form action="" method="post">
                     {% csrf_token %}
                     <button type="summit" class="btn" name="noteID" value="{{ noteObject.id }}"><i class="fa fa-heart"></i>
                         Save Note</button>
                 </form>
                 {% else %}
+                <!-- Delete button: if user are the note author -->
                 <form action="" method="post">
                     {% csrf_token %}
                     <button type="summit" class="btn" name="noteID" value="{{ noteObject.id }}"><i class="fa fa-trash"></i>
@@ -52,6 +55,7 @@
                 </form>
                 {% endif %}
                 {% else %}
+                <!-- login link-text: if user wasn't login -->
                 <a href="/accounts/login">please login to save notes</a>
 
                 {% endif %}
