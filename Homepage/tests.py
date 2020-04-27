@@ -236,10 +236,10 @@ class HomePageTest(TestCase):
 
         # make a post request to login and delete the note
         self.client.post('/accounts/login/', {'username': username, 'password': password } ) 
-        response = self.client.post('/' + str(testCreatedNote.id) + '/', {'noteID': str(testCreatedNote.id) })
+        response = self.client.post('/note/' + str(testCreatedNote.id) + '/', {'noteID': str(testCreatedNote.id) })
 
         # test note was deleted
-        self.assertEqual(Note.objects.count(), 0)
+        self.assertNotIn(testCreatedNote, Note.objects.all())
 
     def tearDown(self):
         # clear the Images directory after finish all the test
