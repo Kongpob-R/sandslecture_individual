@@ -110,6 +110,10 @@ def help(request):
 
 def noteView(request, noteID):
     # handle the request noteID and fetch the Note object with that ID and also all the NoteImage object related to that Note object
+    
+    # 'noteID' in the prameter come from url's interger field
+    # path(note/<int:noteID>/) whatever in there will be in noteID
+
     # it also show up a button names as following
     # save button: if user isn't an author of this note
     # delete button: if user is an author of this note
