@@ -125,7 +125,7 @@ def noteView(request, noteID):
         elif profileObject not in noteObject.userSaved.all():
             noteObject.userSaved.add(profileObject)
             noteObject.save()
-        return HttpResponseRedirect("/" + request.POST.get('noteID'))
+        return HttpResponseRedirect("/note/" + request.POST.get('noteID'))
     else:
         noteObject = Note.objects.get(id = noteID)
         imageObjectList = noteObject.NoteImage.all()

@@ -29,7 +29,7 @@ urlpatterns = [
     path('about/', views.about, name = 'about'),
     path('help/', views.help, name = 'help'),
     path('upload/', views.upload, name = 'upload'),
-    path('<int:noteID>/', views.noteView, name = 'noteView'),
+    path('note/<int:noteID>/', views.noteView, name = 'noteView'),
     path('profile/<str:username>/', views.profile, name = 'profile'),
 ]+static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
