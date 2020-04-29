@@ -114,11 +114,6 @@ def noteView(request, noteID):
     # 'noteID' in the prameter come from url's interger field
     # path(note/<int:noteID>/) whatever in there will be in noteID
 
-    # it also show up a button names as following
-    # save button: if user isn't an author of this note
-    # delete button: if user is an author of this note
-    # link-text to login page: if user is not login
-
     # when user click 'save' that user's Profile object will be add to many-to-many of that note's userSaved
     if request.method == 'POST':
         profileObject = Profile.objects.get(user = request.user)
