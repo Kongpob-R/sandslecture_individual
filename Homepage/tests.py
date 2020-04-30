@@ -23,26 +23,6 @@ class HomePageTest(TestCase):
 
         # and test that those 2 object are relate
         self.assertEqual('newUser',newProfile.user.username)
-        
-    def test_saving_and_retrieving_note_title(self):
-        # create 2 Note objects with different title
-        firstNote = Note()
-        firstNote.title = 'The first (ever) lecture title'
-        firstNote.save()
-
-        secondNote = Note()
-        secondNote.title = 'lecture title the second'
-        secondNote.save()
-
-        # test that exactly 2 Note objects were created
-        notes = Note.objects.all()
-        self.assertEqual(notes.count(), 2)
-
-        # test that all Note object's title are the same when they were created 
-        firstNote = notes[0]
-        secondNote = notes[1]
-        self.assertEqual(firstNote.title, 'The first (ever) lecture title')
-        self.assertEqual(secondNote.title, 'lecture title the second')
 
     def test_saving_note_id_auto_increment_starting_at_1(self):
         # create 2 Note objects with different title
@@ -121,33 +101,6 @@ class HomePageTest(TestCase):
         totalUploadedImages = NoteImage.objects.count()
         self.assertEqual(totalNoteCount, 1)
         self.assertEqual(totalUploadedImages, 2)
-    
-    def test_A_note_getting_save_by_multiple_users(self):
-        # create 3 User and Profile objects
-        creator = User.objects.create_user(username = 'tim01',password = 'pass')
-        userA = User.objects.create_user(username = 'tim11',password = 'pass')
-        userB = User.objects.create_user(username = 'tim21',password = 'pass')
-
-        creatorProfileObject = Profile.objects.create(user = creator)
-        userAProfileObject = Profile.objects.create(user = userA)
-        userBProfileObject = Profile.objects.create(user = userB)
-
-        # create 1 Note object with creator as author
-        testCreatedNote = Note.objects.create(title = 'test', description = 'test', author = creatorProfileObject)
-        
-        # add Profile object to userSaved of that Note object
-        testCreatedNote.userSaved.add(userAProfileObject)
-        
-        # test Note object's userSaved count and Profile object that is added are in
-        self.assertEqual(testCreatedNote.userSaved.count(), 1)
-        self.assertIn(userAProfileObject, testCreatedNote.userSaved.all())
-
-        # add another Profile object to userSaved of that Note object
-        testCreatedNote.userSaved.add(userBProfileObject)
-        
-        # test Note object's userSaved count and Profile object that are added are in
-        self.assertEqual(testCreatedNote.userSaved.count(), 2)
-        self.assertIn(userBProfileObject, testCreatedNote.userSaved.all())
 
     def test_search_Note(self):
         # create User and Profile object to be an author for a testCreatedNote's Note object
@@ -206,24 +159,6 @@ class HomePageTest(TestCase):
         decodedProfilePageResponse = Client().post('/profile/Timmy/', follow = True).content.decode()
         self.assertIn('666.png', decodedProfilePageResponse)
         self.assertIn('tim', decodedProfilePageResponse)
-
-    def test_noteSaved_count_decresing_when_note_get_delete(self):
-        # create 2 User object and Profile object
-        userA = User.objects.create_user(username = 'userA', password = 'userApassword')
-        userAProfileObject = Profile.objects.create(user = userA)
-        userB = User.objects.create_user(username = 'userB', password = 'userBpassword')
-        userBProfileObject = Profile.objects.create(user = userB)
-
-        # create 1 Note object with userA as an author and let userB save this note
-        testCreatedNote = Note.objects.create(title = 'test', description = 'test', author = userAProfileObject)
-        testCreatedNote.userSaved.add(userBProfileObject)
-
-        # test userB's noteSaved count
-        self.assertEqual(userBProfileObject.noteSaved.count(), 1)
-
-        # delete the note and test userB's noteSaved count
-        testCreatedNote.delete()
-        self.assertEqual(userBProfileObject.noteSaved.count(), 0)
 
     def test_deleting_note_via_post_request(self):
         # create userA's User object and Profile object
