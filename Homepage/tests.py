@@ -176,6 +176,36 @@ class HomePageTest(TestCase):
         # test note was deleted
         self.assertNotIn(testCreatedNote, Note.objects.all())
 
+    def test_login_state_effect_button_type_in_noteView_page(self):
+        # create userA User and Profile object and a note with userA as author
+        usernameA = 'userA'
+        passwordA = 'userApassword'
+        userA = User.objects.create_user(username = usernameA, password = passwordA)
+        userAProfileObject = Profile.objects.create(user = userA)
+        testCreatedNote = Note.objects.create(title = 'test', description = 'test', author = userAProfileObject)
+
+        # create userB User and Profile object
+        usernameB = 'userB'
+        passwordB = 'userBpassword'
+        userB = User.objects.create_user(username = usernameB, password = passwordB)
+        userBProfileObject = Profile.objects.create(user = userB)
+
+        # test button type in the page when login as anonymous user
+        response = self.client.get('/note/' + str(testCreatedNote.id) + '/').content.decode()
+        self.assertIn('please login to save notes', response)
+
+        # test button type in the page when login as note's author user
+        self.client.post('/accounts/login/', {'username': usernameA, 'password': passwordA } )
+        response = self.client.get('/note/' + str(testCreatedNote.id) + '/').content.decode()
+        self.assertIn('Delete Note', response)
+        self.client.post('/accounts/logout/')
+
+        # test button type in the page when login as another user that isn't note's author
+        self.client.post('/accounts/login/', {'username': usernameB, 'password': passwordB } )
+        response = self.client.get('/note/' + str(testCreatedNote.id) + '/').content.decode()
+        self.assertIn('Save Note', response)
+        self.client.post('/accounts/logout/')
+
     def tearDown(self):
         # clear the Images directory after finish all the test
         for directory in glob.glob(BASE_DIR+'/sandslecture/media/*'):
