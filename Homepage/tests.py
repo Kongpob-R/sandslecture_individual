@@ -206,6 +206,27 @@ class HomePageTest(TestCase):
         self.assertIn('Save Note', response)
         self.client.post('/accounts/logout/')
 
+    def test_unable_to_save_note_twice(self):
+        # create 2 User and Profile object and 1 Note object with with one of the user as note's author
+        usernameA = 'userA'
+        passwordA = 'userApassword'
+        userA = User.objects.create_user(username = usernameA, password = passwordA)
+        userAProfileObject = Profile.objects.create(user = userA)
+        usernameB = 'userB'
+        passwordB = 'userBpassword'
+        userB = User.objects.create_user(username = usernameB, password = passwordB)
+        userBProfileObject = Profile.objects.create(user = userB)
+        testCreatedNote = Note.objects.create(title = 'test', description = 'test', author = userBProfileObject)
+
+        # test save the note for first time
+        self.client.post('/accounts/login/', {'username': usernameA, 'password': passwordA } )
+        self.client.post('/note/' + str(testCreatedNote.id) + '/', {'noteID': str(testCreatedNote.id) })
+        self.assertEqual(testCreatedNote.userSaved.count(), 1)
+
+        # test save the note again
+        self.client.post('/note/' + str(testCreatedNote.id) + '/', {'noteID': str(testCreatedNote.id) })
+        self.assertEqual(testCreatedNote.userSaved.count(), 1)
+
     def tearDown(self):
         # clear the Images directory after finish all the test
         for directory in glob.glob(BASE_DIR+'/sandslecture/media/*'):
