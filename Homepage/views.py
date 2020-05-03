@@ -109,26 +109,35 @@ def help(request):
     return render(request, 'help.html')
 
 def noteView(request, noteID):
-    # handle the request noteID and fetch the Note object with that ID and also all the NoteImage object related to that Note object
-    
     # 'noteID' in the prameter come from url's interger field
     # path(note/<int:noteID>/) whatever in there will be in noteID
 
-    # when user click 'save' that user's Profile object will be add to many-to-many of that note's userSaved
+    # deleting and saving note will send the same post request here, logic bellow will be choose what to do
     if request.method == 'POST':
         profileObject = Profile.objects.get(user = request.user)
         noteObject = Note.objects.get(id = int(request.POST.get('noteID')))
+
+    # delete the note, when user are login as note's author
         if profileObject == noteObject.author:
             noteObject.delete()
             return HttpResponseRedirect("/")
+
+    # save the note, when user login as any others that not note's author
+    # that user's Profile object will be add to many-to-many of that note's userSaved
         elif profileObject not in noteObject.userSaved.all():
             noteObject.userSaved.add(profileObject)
             noteObject.save()
         return HttpResponseRedirect("/note/" + request.POST.get('noteID'))
+
+    # handle the request noteID and fetch the Note object with that ID and also all the NoteImage object related to that Note object
     else:
         noteObject = Note.objects.get(id = noteID)
         imageObjectList = noteObject.NoteImage.all()
         return render(request, 'notedetail.html', {'noteObject': noteObject, "imageObjectList": imageObjectList})
+    # notedetail page contain a button that will change it self to
+    # save button, 
+    # delete button, when user login as note's author
+    # login link text, when user are not login
 
 def profile(request, username):
     # handle the request of user when a profile picture was uploaded and update Profile object with that picture
