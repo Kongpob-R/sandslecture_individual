@@ -227,6 +227,52 @@ class HomePageTest(TestCase):
         self.client.post('/note/' + str(testCreatedNote.id) + '/', {'noteID': str(testCreatedNote.id) })
         self.assertEqual(testCreatedNote.userSaved.count(), 1)
 
+    def test_notes_popularity_ordering_in_template(self):
+        import re
+
+        # create 3 User and Profile objects and 3 Note objects for each user
+        userA = User.objects.create_user(username = 'userA', password = 'userApassword')
+        userAProfileObject = Profile.objects.create(user = userA)
+        userB = User.objects.create_user(username = 'userB', password = 'userBpassword')
+        userBProfileObject = Profile.objects.create(user = userB)
+        userC = User.objects.create_user(username = 'userC', password = 'userCpassword')
+        userCProfileObject = Profile.objects.create(user = userC)
+        imageFile = os.path.join(settings.BASE_DIR, 'red.png')
+        userANote = Note.objects.create(title = 'test', description = 'test', author = userAProfileObject)
+        image1 = NoteImage.objects.create(noteKey=userANote)
+        image1.image = imageFile
+        image1.save()
+        userBNote = Note.objects.create(title = 'test', description = 'test', author = userBProfileObject)
+        image2 = NoteImage.objects.create(noteKey=userBNote)
+        image2.image = imageFile
+        image2.save()
+        userCNote = Note.objects.create(title = 'test', description = 'test', author = userCProfileObject)
+        image3 = NoteImage.objects.create(noteKey=userCNote)
+        image3.image = imageFile
+        image3.save()
+
+        # save each note with 0, 1 and 2 profile objects
+        # So, end up with
+        # userANote 0 saves
+        # userBNote 1 saves
+        # userCNote 2 saves
+        userBNote.userSaved.add(userAProfileObject)
+        userBNote.save()
+        userCNote.userSaved.add(userBProfileObject)
+        userCNote.userSaved.add(userAProfileObject)
+        userCNote.save()
+
+        # test ordering of saves count
+        decodedResponse = self.client.get('/').content.decode()
+        noteList = re.findall('[0-9] Saves', decodedResponse)[:Note.objects.count()]
+        listIsDescending = True
+        for i in range(len(noteList)):
+            if i == len(noteList) - 1:
+                pass
+            elif int(re.sub('\D', '', noteList[i])) <= int(re.sub('\D', '', noteList[i + 1])):
+                listIsDescending = False
+        self.assertEqual(listIsDescending, True)
+
     def tearDown(self):
         # clear the Images directory after finish all the test
         for directory in glob.glob(BASE_DIR+'/sandslecture/media/*'):
